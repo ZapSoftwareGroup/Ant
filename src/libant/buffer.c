@@ -27,3 +27,9 @@ extern int libant_load_buffer_from_file(FILE* fp, char** buffer)
 	}
 	return 0;
 }
+
+extern int libant_load_buffer_from_file_path(char* path, char** buffer)
+{
+	if(libant_load_buffer_from_file(fopen(path, "r"), buffer) < 0) { return -1; }
+	return 0;
+}
