@@ -1,5 +1,6 @@
 use ant::cli;
-// use termion::clear;
+use ant::tui;
+
 
 fn main() {
     let input = cli::cli_matches();
@@ -8,8 +9,9 @@ fn main() {
 
     if blank {
         println!("No input provided, entering splash screen!");
+        tui::render_blank_tui();
     } else {
         let path = cli::find_full_path(input.as_ref());
-        println!("File provided as: {}", path.display());
+
     }
 }

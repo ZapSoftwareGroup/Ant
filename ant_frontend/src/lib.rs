@@ -1,3 +1,3 @@
 pub mod cli;
-mod tui;
+pub mod tui;
 
