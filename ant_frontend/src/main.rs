@@ -8,10 +8,10 @@ fn main() {
     let blank: bool = if input == "".to_string() { true } else { false };
 
     if blank {
-        println!("No input provided, entering splash screen!");
-        tui::render_blank_tui();
+        tui::render_tui(None);
     } else {
-        let path = cli::find_full_path(input.as_ref());
+        let _path = cli::find_full_path(input.as_ref());
+        tui::render_tui(Some(input.as_ref()));
 
     }
 }

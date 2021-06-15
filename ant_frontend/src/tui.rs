@@ -4,35 +4,62 @@ use termion::raw::IntoRawMode;
 use std::io::{Write, stdout, stdin};
 use termion::event::Key;
 use termion::input::TermRead;
+use termion::screen::*;
 
-pub fn render_blank_tui() {
+pub fn render_tui(input: Option<&str>) {
     let term_size: (u16, u16) = termion::terminal_size().expect("Don't use windows!");
 
     let stdin = stdin();
 
-    let mut stdout = stdout().into_raw_mode().unwrap();
+    let mut screen = AlternateScreen::from(stdout().into_raw_mode().unwrap());
 
     let half_width = (term_size.0/2)-30;
     let half_height = term_size.1/2;
+    let height = term_size.1;
 
-    write!(stdout, "{}{}Ant text editor, copyleft 2021. Press any key to continue...{}",
+    write!(screen, "{}{}Ant text editor, copyleft 2021. Press any space to continue...{}",
            clear::All,
            termion::cursor::Goto(half_width, half_height),
            termion::cursor::Hide).unwrap();
+    match input {
+        Some(val) => {
+            write!(screen, "{}Filename: {}{}", 
+                   termion::cursor::Goto(1, height),
+                   val,
+                   termion::cursor::Hide).unwrap();
+        },
+        None => {
+            write!(screen, "").unwrap();
+        }
 
-    stdout.flush().unwrap();
+    }
+
+    screen.flush().unwrap();
 
     for c in stdin.keys() {
         match c.unwrap() {
-            _ => {
-                termion::cursor::Goto(term_size.0, term_size.1);
-                termion::cursor::Show;
-                write!(stdout, "{}", clear::All).unwrap();
-                break
+            Key::Char(' ') => {
+                writeln!(screen, "{}{}",
+                       termion::cursor::Goto(1, height-1),
+                       clear::BeforeCursor).unwrap();
+                
+            match input {
+                Some(_val) => {
+                    ()
+                },
+                None => {
+                    break
+                }
+
+            };
             },
-        }
+            _ => {
+                write!(screen, "{}", clear::All).unwrap();
+                break
+            }
+        };
 
     };
-    write!(stdout, "{}", termion::cursor::Show).unwrap();
+    write!(screen, "{}", termion::cursor::Show).unwrap();
 }
 
