@@ -10,6 +10,6 @@ fn main() {
         println!("No input provided, entering splash screen!");
     } else {
         let path = cli::find_full_path(input.as_ref());
-        println!("File provided: {}", path.display());
+        println!("File provided as: {}", path.display());
     }
 }
