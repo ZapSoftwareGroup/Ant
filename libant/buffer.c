@@ -4,7 +4,7 @@
 
 #include "buffer.h"
 
-extern int libant_load_buffer_from_file(FILE* fp, char** buffer)
+extern int libant_load_buffer_from_file(FILE* fp, struct libant_buffer* buf)
 {
 	if(fp != NULL)
 	{
@@ -14,22 +14,23 @@ extern int libant_load_buffer_from_file(FILE* fp, char** buffer)
 			long bufsize = ftell(fp);
 			if(bufsize < 0) { return -1; }
 
-			*buffer = malloc((bufsize + 1)*sizeof(char));
+			buf->ptr = malloc((bufsize + 1)*sizeof(char));
 			if(fseek(fp, 0L, SEEK_SET) != 0) { return -1; }
 
-			size_t newLen = fread(*buffer, sizeof(char), bufsize, fp);
+			size_t newLen = fread(buf->ptr, sizeof(char), bufsize, fp);
 			if(ferror(fp) != 0)
 				fputs("Error reading file", stderr);
 			else
-				*(*buffer+newLen++) = '\0';
+				*(buf->ptr+newLen++) = '\0';
+			buf->len = bufsize;
 		}
 		fclose(fp);
 	}
 	return 0;
 }
 
-extern int libant_load_buffer_from_file_path(char* path, char** buffer)
+extern int libant_load_buffer_from_file_path(char* path, struct libant_buffer* buf)
 {
-	if(libant_load_buffer_from_file(fopen(path, "r"), buffer) < 0) { return -1; }
+	if(libant_load_buffer_from_file(fopen(path, "r"), buf) < 0) { return -1; }
 	return 0;
 }
