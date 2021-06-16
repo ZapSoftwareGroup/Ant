@@ -26,5 +26,21 @@ Here are the most common usage examples for `ant`:
 ### Exit the editor
 Enter: `M-x quit`
 
+## Library implementation
+The library needs to be designed a certain way in order to fit the frontend. A frontend, GUI or terminal based, can be built around this implementation.
+
+### String from filepath
+Functions also exist that take a filepath. `libant_string_from_filepath` will take in a filepath as a string (guarunteed to be there), and return raw file data (string/bytes/whatever this is called in c).
+
+Typically in the frontend, a new type called buffer is created which holds crucial data like filepath, file name. This type will have a method called `.to_string()` which will call 
+the `libant_string_from_filepath` function.
+
+All future functions will be performed on this raw data.
+
+### Text manipulation
+All text manipulation functions take in raw string. 
+
+Another function is called, `read_next_line_of_file`. This function will return the next line of a string when called. The frontend should read this, and display it on each line.
+
 ## License
 `ant` is licensed under the GNU/GPLv3
