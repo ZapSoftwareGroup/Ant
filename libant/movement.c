@@ -39,8 +39,8 @@ int libant_movement_action(char action, struct libant_buffer* buf)
 			break;
 		case 'j':
 			{
-			int distance_to_start = libant_get_distance_to_line_start(buf);
-			buf->ptr += libant_get_distance_to_line_end(buf);
+			int distance_to_start = libant_get_distance_to_line_start(buf->ptr);
+			buf->ptr += libant_get_distance_to_line_end(buf->ptr);
 			for(int i = 0; i < distance_to_start; ++i)
 			{
 				if(*(buf->ptr+1))
@@ -52,8 +52,8 @@ int libant_movement_action(char action, struct libant_buffer* buf)
 			}
 		case 'k':
 			{
-			int distance_to_end = libant_get_distance_to_line_end(buf);
-			buf->ptr -= libant_get_distance_to_line_start(buf);
+			int distance_to_end = libant_get_distance_to_line_end(buf->ptr);
+			buf->ptr -= libant_get_distance_to_line_start(buf->ptr);
 			for(int i = 0; i < distance_to_end; ++i)
 			{
 				if(*(buf->ptr-1))
@@ -69,24 +69,40 @@ int libant_movement_action(char action, struct libant_buffer* buf)
 	return 0;
 }
 
-int libant_get_distance_to_line_start(struct libant_buffer* buf)
+int libant_get_distance_to_line_start(char* buf)
 {
 	int distance = 0;
-	while(*(buf->ptr-1) && *(buf->ptr-1) != '\n')
+	while(*(buf-1) && *(buf-1) != '\n')
 	{
-		buf->ptr--;
+		buf--;
 		distance++;
 	}
 	return distance;
 }
 
-int libant_get_distance_to_line_end(struct libant_buffer* buf)
+int libant_get_distance_to_line_end(char* buf)
 {
-	int distance = 0;
-	while(*(buf->ptr+1) && *(buf->ptr+1) != '\n')
+	int distance = 1;
+	if(*buf == '\n')
+		return 0;
+	while(*(buf+1) && *(buf+1) != '\n')
 	{
-		(buf->ptr)++;
+		buf++;
 		distance++;
 	}
 	return distance;
+}
+
+extern char* libant_get_line(int linenum, struct libant_buffer* buf)
+{
+	char* line = NULL;
+	char* bufptr = buf->ptr;
+	for(int i = 1; i < linenum; ++i)
+	{
+		bufptr += libant_get_distance_to_line_end(bufptr)+1;
+	}
+	line = malloc((libant_get_distance_to_line_end(bufptr)+1)*sizeof(char));
+	memcpy(line, bufptr, (libant_get_distance_to_line_end(bufptr))*sizeof(char));
+	line[libant_get_distance_to_line_end(bufptr)] = '\0';
+	return line;
 }
