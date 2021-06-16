@@ -1,5 +1,5 @@
 CC = clang
-CLFAGS = -Wall
+CFLAGS = -Wall -g
 
 SRCFILES = $(wildcard ./*.c)
 OBJFILES = $(SRCFILES:c=o)
@@ -15,7 +15,7 @@ lib: $(OBJFILES)
 tests: lib $(TESTBIN)
 
 $(TESTBIN): $(TESTSRC)
-	$(CC) -o $@ $< $(CFLAGS) -L. -lant
+	$(CC) -o $@ $@.c $(CFLAGS) -L. -lant
 
 .c.o:
 	$(CC) -o $@ -c $< $(CFLAGS)
