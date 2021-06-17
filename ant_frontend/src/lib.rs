@@ -1,5 +1,4 @@
 pub mod cli;
 pub mod tui;
-
-include!("bindings.rs");
-
+pub mod buffer;
+pub mod editor;
