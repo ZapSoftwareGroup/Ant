@@ -34,6 +34,19 @@ extern int libant_move_up(int pos, struct libant_buffer* buf)
 	return newpos;
 }
 
+extern int libant_move_left(int pos, struct libant_buffer* buf)
+{
+	if(*(buf->ptr+(pos-1)) == '\n' || !*(buf->ptr+(pos-1)))
+		return pos;
+	return pos-1;
+}
+extern int libant_move_right(int pos, struct libant_buffer* buf)
+{
+	if(*(buf->ptr+(pos)) == '\n' || !*(buf->ptr+(pos+1)))
+		return pos;
+	return pos+1;
+}
+
 int libant_get_distance_to_line_start(char* buf)
 {
 	int distance = 0;
