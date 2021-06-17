@@ -10,15 +10,15 @@ TESTBIN = $(TESTSRC:.c=)
 all: lib tests
 
 lib: $(SRCFILES)
-	$(CC)  $(CFLAGS) -fPIC -c $^
+	$(CC) $(CFLAGS) -fPIC -c $^
 	$(CC) -shared -Wl,-soname,libant.so -o libant.so $(OBJFILES)
 
 install: lib
-	cp -f libant.so /usr/lib
-	chmod 755 /usr/lib/libant.so
+	cp -f libant.so ~/.local/lib
+	chmod 755 ~/.local/lib/libant.so
 
 uninstall:
-	rm -f /usr/lib/libant.so
+	rm -f ~/.local/lib/libant.so
 
 tests: $(TESTBIN)
 
