@@ -4,75 +4,40 @@
 
 #include "movement.h"
 
-extern int libant_movement(int num, char action, struct libant_buffer* buf)
+extern int libant_move_down(int pos, struct libant_buffer* buf)
 {
-	for(int i = 0; i < num; ++i)
+	if(buf->ptr[pos] == '\n')
+		return pos+1;
+	int distance_to_start = libant_get_distance_to_line_start(buf->ptr+pos);
+	int newpos = pos + libant_get_distance_to_line_end(buf->ptr+pos);
+	for(int i = 0; i < distance_to_start; ++i)
 	{
-		if(libant_movement_action(action, buf) < 0 ) { return -1; }
+		if(*(buf->ptr+1) && *(buf->ptr+1) != '\n')
+			newpos++;
+		else
+			break;
 	}
-	return 0;
+	return newpos;
 }
 
-int libant_movement_action(char action, struct libant_buffer* buf)
+extern int libant_move_up(int pos, struct libant_buffer* buf)
 {
-	switch(action)
+	int distance_to_end = libant_get_distance_to_line_end(buf->ptr+pos);
+	int newpos = pos - libant_get_distance_to_line_start(buf->ptr+pos)-1;
+	for(int i = 0; i < distance_to_end; ++i)
 	{
-		case 'w':
-		case 'e':
-			while(*buf->ptr != ' ' && *buf->ptr)
-				(buf->ptr)++;
-			if(*buf->ptr && (action == 'w'))
-				(buf->ptr)++;
+		if(*(buf->ptr-1) && *(buf->ptr) != '\n')
+			newpos--;
+		else
 			break;
-		case 'b':
-			while(*buf->ptr != ' ' && *buf->ptr)
-				buf->ptr--;
-			if(*buf->ptr)
-				buf->ptr++;
-		case 'l':
-			if(*(buf->ptr+1))
-				buf->ptr++;
-			break;
-		case 'h':
-			if(*(buf->ptr-1))
-				buf->ptr--;
-			break;
-		case 'j':
-			{
-			int distance_to_start = libant_get_distance_to_line_start(buf->ptr);
-			buf->ptr += libant_get_distance_to_line_end(buf->ptr);
-			for(int i = 0; i < distance_to_start; ++i)
-			{
-				if(*(buf->ptr+1))
-					(buf->ptr)++;
-				else
-					break;
-			}
-			break;
-			}
-		case 'k':
-			{
-			int distance_to_end = libant_get_distance_to_line_end(buf->ptr);
-			buf->ptr -= libant_get_distance_to_line_start(buf->ptr);
-			for(int i = 0; i < distance_to_end; ++i)
-			{
-				if(*(buf->ptr-1))
-					buf->ptr--;
-				else
-					break;
-			}
-			break;
-			}
-		default:
-			return -1;
 	}
-	return 0;
+	return newpos;
 }
 
 int libant_get_distance_to_line_start(char* buf)
 {
 	int distance = 0;
-	while(*(buf-1) && *(buf-1) != '\n')
+	while(*(buf-1) && *(buf-2) != '\n')
 	{
 		buf--;
 		distance++;
