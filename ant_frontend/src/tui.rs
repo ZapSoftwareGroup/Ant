@@ -71,10 +71,10 @@ pub fn render_tui(editor: Editor) {
            termion::cursor::Goto(half_width, half_height),
            termion::cursor::Hide).unwrap();
 
-    
+
     match &editor.buffers[0].name {
         Some(val) => {
-            write!(screen, "{}Filename: {}{}", 
+            write!(screen, "{}Filename: {}{}",
                    termion::cursor::Goto(1, height),
                    val,
                    termion::cursor::Hide).unwrap();
@@ -93,7 +93,7 @@ pub fn render_tui(editor: Editor) {
                 writeln!(screen, "{}{}",
                        termion::cursor::Goto(1, height-1),
                        clear::BeforeCursor).unwrap();
-                
+
             match &editor.buffers[0].name {
                 Some(_val) => {
                     draw_lines(&mut screen, &mut editor.buffers[0].buffer_by_line());
@@ -105,7 +105,7 @@ pub fn render_tui(editor: Editor) {
             };
             },
             _ => {
-                write!(screen, "{}", clear::All).unwrap();
+                write!(screen, "{}{}", clear::All, termion::cursor::Show).unwrap();
                 break
             }
         };
