@@ -13,16 +13,11 @@ fn main() {
     } else {
         let path = cli::find_full_path(input.as_ref());
 
-        let buffer = Buffer {
-            name: Some(input),
-            file_path: path,
+        let mut editor = Editor {
+            buffers: Vec::new()
         };
 
-        let buf_vec = vec![buffer];
-
-        let editor = Editor {
-            buffers: buf_vec
-        };
+        editor.new_buffer(path, input);
 
         tui::render_tui(editor);
 

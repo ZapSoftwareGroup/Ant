@@ -1,18 +1,16 @@
-use crate::buffer;
+use crate::buffer::Buffer;
 use std::path::PathBuf;
 
 
-pub struct Editor {
-    pub buffers: Vec<buffer::Buffer>
+pub struct Editor<T> {
+    pub buffers: Vec<T>
 }
 
-impl Editor {
+impl Editor<Buffer> {
     pub fn new_buffer(&mut self, path: PathBuf, name: String) {
-        let buffer = buffer::Buffer {
-            name: Some(name),
-            file_path: path
-        };
+        let buffer = Buffer::new_buffer(path, Some(name));
         self.buffers.push(buffer);
+        
 
     } 
 }
