@@ -8,7 +8,6 @@ use termion::screen::*;
 use crate::editor::Editor;
 use std::fs::File;
 
-
 pub fn draw_lines(screen: &mut impl Write, line_iterator: &mut io::Result<io::Lines<io::BufReader<File>>>) {
     if let Ok(lines) = line_iterator {
         for (i, line) in lines.enumerate() {
