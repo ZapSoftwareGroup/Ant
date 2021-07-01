@@ -4,7 +4,7 @@
 
 #include "buffer.h"
 
-extern int libant_load_buffer_from_file(FILE* fp, struct libant_buffer* buf)
+extern int libant_load_buffer_from_file(FILE* fp, libant_buffer* buf)
 {
 	if(fp != NULL)
 	{
@@ -32,13 +32,13 @@ extern int libant_load_buffer_from_file(FILE* fp, struct libant_buffer* buf)
 	return 0;
 }
 
-extern int libant_load_buffer_from_file_path(char* path, struct libant_buffer* buf)
+extern int libant_load_buffer_from_file_path(char* path, libant_buffer* buf)
 {
 	if(libant_load_buffer_from_file(fopen(path, "r"), buf) < 0) { return -1; }
 	return 0;
 }
 
-extern int libant_buffer_update_coordinates(struct libant_buffer* buf)
+extern int libant_buffer_update_coordinates(libant_buffer* buf)
 {
 	if(buf->cur_pos < 0)
 		return libant_update_1d_coord(buf);
@@ -48,7 +48,7 @@ extern int libant_buffer_update_coordinates(struct libant_buffer* buf)
 		return -1;
 }
 
-int libant_update_1d_coord(struct libant_buffer* buf)
+int libant_update_1d_coord(libant_buffer* buf)
 {
 	int x = buf->xcoord;
 	int y = buf->ycoord;
@@ -68,7 +68,7 @@ int libant_update_1d_coord(struct libant_buffer* buf)
 	return 0;
 }
 
-int libant_update_2d_coords(struct libant_buffer* buf)
+int libant_update_2d_coords(libant_buffer* buf)
 {
 	int x = 1;
 	int y = 1;
@@ -87,5 +87,19 @@ int libant_update_2d_coords(struct libant_buffer* buf)
 	}
 	buf->ycoord = y;
 	buf->xcoord = x;
+	return 0;
+}
+
+extern int libant_init_buffer(libant_buffer* buf)
+{
+	buf->settings = malloc(sizeof(default_settings));
+	memcpy(buf->settings, default_settings, sizeof(default_settings));
+	buf->cur_pos = 0;
+	buf->xcoord = buf->ycoord = 1;
+	buf->len = 0;
+	buf->filename = NULL;
+	buf->path = NULL;
+	buf->ptr = NULL;
+	buf->response = NULL;
 	return 0;
 }

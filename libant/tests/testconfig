@@ -1,0 +1,5 @@
+# Settings
+set linenumbers=false
+set relativelinenumbers=false
+set wrap=true
+set statusbar=StatusbarTextValue

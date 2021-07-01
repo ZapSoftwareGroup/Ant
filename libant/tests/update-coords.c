@@ -3,7 +3,7 @@
 
 int main()
 {
-	struct libant_buffer buffer;
+	libant_buffer buffer;
 	libant_load_buffer_from_file_path("test.txt", &buffer);
 	buffer.cur_pos = 128;
 	buffer.xcoord = -1;
