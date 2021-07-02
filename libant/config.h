@@ -8,6 +8,5 @@ struct libant_setting {
 static const struct libant_setting default_settings[] = {
 	{ "linenumbers", "true" },
 	{ "relativelinenumbers", "false" },
-	{ "wrap", "true" },
 	{ "statusbar", "Ant: V0.01" },
 };
