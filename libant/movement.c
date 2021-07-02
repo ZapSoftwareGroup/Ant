@@ -4,7 +4,7 @@
 
 #include "movement.h"
 
-extern int libant_move_down(int pos, struct libant_buffer* buf)
+extern int libant_move_down(int pos, libant_buffer* buf)
 {
 	if(buf->ptr[pos] == '\n')
 		return pos+1;
@@ -20,7 +20,7 @@ extern int libant_move_down(int pos, struct libant_buffer* buf)
 	return newpos;
 }
 
-extern int libant_move_up(int pos, struct libant_buffer* buf)
+extern int libant_move_up(int pos, libant_buffer* buf)
 {
 	int distance_to_end = libant_get_distance_to_line_end(buf->ptr+pos);
 	int newpos = pos - libant_get_distance_to_line_start(buf->ptr+pos)-1;
@@ -34,13 +34,13 @@ extern int libant_move_up(int pos, struct libant_buffer* buf)
 	return newpos;
 }
 
-extern int libant_move_left(int pos, struct libant_buffer* buf)
+extern int libant_move_left(int pos, libant_buffer* buf)
 {
 	if(*(buf->ptr+(pos-1)) == '\n' || !*(buf->ptr+(pos-1)))
 		return pos;
 	return pos-1;
 }
-extern int libant_move_right(int pos, struct libant_buffer* buf)
+extern int libant_move_right(int pos, libant_buffer* buf)
 {
 	if(*(buf->ptr+(pos)) == '\n' || !*(buf->ptr+(pos+1)))
 		return pos;
@@ -71,7 +71,7 @@ int libant_get_distance_to_line_end(char* buf)
 	return distance;
 }
 
-extern char* libant_get_line(int linenum, struct libant_buffer* buf)
+extern char* libant_get_line(int linenum, libant_buffer* buf)
 {
 	char* line = NULL;
 	char* bufptr = buf->ptr;
