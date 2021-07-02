@@ -1,28 +1,15 @@
-use termion::color;
 use termion::clear;
 use termion::raw::IntoRawMode;
-use std::io::Stdin;
 use std::io::{Write, stdout, stdin};
-use std::str::Lines;
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::screen::*;
+use termion::cursor::DetectCursorPos;
 use crate::editor::Editor;
 use crate::buffer::Buffer;
+use crate::draw::draw_lines;
+use crate::movement;
 
-
-pub fn draw_lines(screen: &mut impl Write, line_iterator: Vec<String>) {
-    for (line_number, line) in line_iterator.iter().enumerate() {
-        let line_number: u16 = (line_number+1) as u16;
-        writeln!(screen, "{}{}  {}",
-            termion::cursor::Goto(1, line_number),
-            line_number,
-            line).unwrap();
-    }
-    print!("{}",
-        termion::cursor::Goto(1, 1)
-    );
-}
 
 pub fn render_blank_tui() {
     let term_size: (u16, u16) = termion::terminal_size().expect("Don't use windows!");
@@ -57,16 +44,16 @@ pub fn render_blank_tui() {
     };
 }
 
-pub fn render_tui(editor: Editor<Buffer>) {
+pub fn render_tui(editor: &mut Editor<Buffer>) {
     let term_size: (u16, u16) = termion::terminal_size().expect("Don't use windows!");
 
-    let stdin = stdin();
+    let mut stdin = stdin();
 
     let mut screen = AlternateScreen::from(stdout().into_raw_mode().unwrap());
 
     let half_width = (term_size.0/2)-30;
     let half_height = term_size.1/2;
-    let height = term_size.1;
+    let height: u16 = term_size.1 - 1;
 
     write!(screen, "{}{}Ant text editor, copyleft 2021. Press any space to continue...",
            clear::All,
@@ -77,7 +64,7 @@ pub fn render_tui(editor: Editor<Buffer>) {
     match &editor.buffers[0].name {
         Some(val) => {
             write!(screen, "{}Filename: {}",
-                   termion::cursor::Goto(1, height),
+                   termion::cursor::Goto(1, height+1),
                    val).unwrap();
         },
         None => {
@@ -87,42 +74,51 @@ pub fn render_tui(editor: Editor<Buffer>) {
     }
 
     screen.flush().unwrap();
-
+    let mut lines_drawn = false;
     for c in stdin.keys() {
         match c.unwrap() {
             Key::Char(' ') => {
-                writeln!(screen, "{}{}",
-                       termion::cursor::Goto(1, height-1),
-                       clear::BeforeCursor).unwrap();
-                draw_lines(&mut screen, editor.buffers[0].buffer_by_line());
+                if !lines_drawn {
+                    writeln!(screen, "{}{}",
+                           termion::cursor::Goto(1, height-1),
+                           clear::BeforeCursor).unwrap();
 
-            
+                    draw_lines(&mut editor.buffers[0], &mut screen, height as usize - 1);
+                    lines_drawn = true;
+                }
             },
             Key::Ctrl('q') => {
-                write!(screen, "{}{}", clear::All, termion::cursor::Show).unwrap();
                 break
+            },
+            Key::Up => {
+                if lines_drawn {
+                    let buffer = &mut editor.buffers[0];
+                    writeln!(&mut screen, "{}", termion::cursor::Goto(5, buffer.current_height-1)).unwrap();
+                    buffer.current_height = buffer.current_height-1;
+                }
+            },
+            Key::Down => {
+                if lines_drawn {
+                    let buffer = &mut editor.buffers[0];
+                    writeln!(screen, "{}", termion::cursor::Goto(5,buffer.current_height+1)).unwrap();
+                    buffer.current_height = buffer.current_height+1;
+                }
+            },
+            Key::Right => {
+                if lines_drawn {
+                    let buffer = &mut editor.buffers[0];
+                    writeln!(screen, "{}", termion::cursor::Goto(buffer.current_width+1,buffer.current_height)).unwrap();
+                    buffer.current_width = buffer.current_width+1;
+                }
+            },
+            Key::Left => {
+                if lines_drawn {
+                    let buffer = &mut editor.buffers[0];
+                    writeln!(screen, "{}", termion::cursor::Goto(buffer.current_width-1,buffer.current_height)).unwrap();
+                    buffer.current_width = buffer.current_width-1;
+                }
             },
             _ => ()
         };
     }
 }
-
-//fn manage_keypress(stdin: &mut Stdin, stdout: &mut impl Write) {
-//    for c in stdin.keys() {
-//        match c.unwrap() {
-//            Key::Char(' ') => {
-//                writeln!(screen, "{}{}",
-//                       termion::cursor::Goto(1, height-1),
-//                       clear::BeforeCursor).unwrap();
-//                draw_lines(&mut screen, editor.buffers[0].buffer_by_line());
-//
-//            
-//            },
-//           Key::Ctrl('q') => {
-//                write!(screen, "{}{}", clear::All, termion::cursor::Show).unwrap();
-//                break
-//            },
-//            _ => ()
-//        };
-//    }
-// }

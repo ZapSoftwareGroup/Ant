@@ -1,7 +1,6 @@
 use ant::cli;
 use ant::tui;
 use ant::editor::Editor;
-use ant::buffer::Buffer;
 
 fn main() {
     let input = cli::cli_matches();
@@ -19,7 +18,7 @@ fn main() {
 
         editor.new_buffer(path, input);
 
-        tui::render_tui(editor);
+        tui::render_tui(&mut editor);
 
     }
 }
