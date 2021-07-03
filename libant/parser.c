@@ -4,6 +4,7 @@ extern int libant_parse_line(char* line, libant_command* outcmd)
 {
 	char* verb = NULL;
 	char* word = strtok(line, " =\n");
+	char* partone = NULL;
 	outcmd->argcount = -1;
 	for(int i = 0; word != NULL; ++i)
 	{
@@ -18,13 +19,34 @@ extern int libant_parse_line(char* line, libant_command* outcmd)
 			outcmd->argcount = libant_get_argcount(verb);
 			outcmd->args = malloc(outcmd->argcount*sizeof(char*));
 		}
+		else if(word[0] == '"') // Argument is a string literal
+		{
+			partone = malloc((strlen(word)+1)*sizeof(char));
+			strcpy(partone, word);
+			partone++;
+			partone[strlen(partone)] = ' ';
+			word = strtok(NULL, "\"");
+			if(word == NULL) // FIXME: Definitely not the most elegant way to do this
+			{
+				outcmd->args[i-1] = malloc((strlen(partone)+1)*sizeof(char));
+				partone[strlen(partone)-2] = '\0';
+				strcpy(outcmd->args[i-1], partone);
+			}
+			else
+			{
+				outcmd->args[i-1] = malloc((strlen(partone)+strlen(word)+1)*sizeof(char));
+				strcpy(outcmd->args[i-1], partone);
+				strcat(outcmd->args[i-1], word);
+			}
+		}
 		else
 		{
-			outcmd->args[i-1] = malloc(strlen(word)+1*sizeof(char));
+			outcmd->args[i-1] = malloc((strlen(word)+1)*sizeof(char));
 			strcpy(outcmd->args[i-1], word);
 		}
 		word = strtok(NULL, " =\n");
 	}
+	free(verb);
 	return 0;
 }
 

@@ -3,7 +3,7 @@
 int main()
 {
 	libant_command cmd;
-	char line[50] = "set kameli=best";
+	char line[50] = "set kameli=\"best mammal ever\"";
 	libant_parse_line(line, &cmd);
 	printf("Verb: %s\n", cmd.cmdname);
 	printf("Args: \n");
