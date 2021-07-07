@@ -1,12 +1,26 @@
 use std::io::Write;
-use termion::cursor;
-use crate::buffer::Buffer;
+use crate::buffer::DefaultBuffer;
 
 
-pub fn move_down(screen: &mut impl Write, buffer: &mut Buffer) -> Result<(), String> {
-    let current_height = buffer.current_height;
-    let current_width = buffer.current_width;
-    writeln!(screen, "{}", cursor::Goto(current_width, current_height-1)).unwrap();
-    buffer.current_height = current_height-1;
-    Ok(())
+pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+    buffer.set_position(screen, buffer.current_x, buffer.current_y+1);
+    screen.flush().unwrap();
+    
+}
+
+pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+    if buffer.current_y!=1 {
+        buffer.set_position(screen, buffer.current_x, buffer.current_y-1);
+        screen.flush().unwrap();
+    }
+}
+
+pub fn move_left(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+    buffer.set_position(screen, buffer.current_x-1, buffer.current_y);
+    screen.flush().unwrap();
+}
+
+pub fn move_right(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+    buffer.set_position(screen, buffer.current_x+1, buffer.current_y);
+    screen.flush().unwrap();
 }

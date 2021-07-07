@@ -27,7 +27,20 @@ pub fn find_full_path(path: &str) -> PathBuf {
         let _file = File::create(new_path);
         new_path.to_path_buf()
     }
+}
 
-
-
+pub fn find_name(input: &PathBuf) -> Option<String> {
+    match input.file_name() {
+        Some(val) => {
+            match val.to_str() {
+                Some(val) => {
+                    Some(val.to_owned())
+                },
+                None => None
+            }
+        },
+        None => {
+            None
+        }
+    }
 }
