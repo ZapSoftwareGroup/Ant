@@ -6,7 +6,7 @@ use termion::color;
 const STATUS_FG_COLOR: color::Rgb = color::Rgb(63, 63, 63);
 const STATUS_BG_COLOR: color::Rgb = color::Rgb(239, 239, 239);
 
-pub fn draw_statusline(screen: &mut impl Write, buffer: &DefaultBuffer, height: u16, width: u16) {
+pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u16, width: u16) {
 
     write!(screen, "{}", termion::cursor::Goto(1, height-1)).unwrap();
 
@@ -57,19 +57,25 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, last: u16
             continue;
         } else {
             if (line_number>=10)&(line_number<100) {
-                write!(screen, "{}{}  {}",
+                write!(screen, "{}{}{}{}  {}",
                     termion::cursor::Goto(1, line_number as u16),
+                    color::Fg(color::LightYellow),
                     line_number,
+                    color::Fg(color::Reset),
                     line).unwrap();
             } else if (line_number>=100)&(line_number<1000) {
-                write!(screen, "{}{} {}",
+                write!(screen, "{}{}{}{} {}",
                     termion::cursor::Goto(1, line_number as u16),
+                    color::Fg(color::LightYellow),
                     line_number,
+                    color::Fg(color::Reset),
                     line).unwrap();
             } else {
-                write!(screen, "{}{}   {}",
+                write!(screen, "{}{}{}{}   {}",
                     termion::cursor::Goto(1, line_number as u16),
+                    color::Fg(color::LightYellow),
                     line_number,
+                    color::Fg(color::Reset),
                     line).unwrap();
             }
         }
