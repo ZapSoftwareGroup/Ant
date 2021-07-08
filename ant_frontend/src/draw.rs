@@ -52,7 +52,9 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
     let (terminal_width, terminal_height) = termion::terminal_size().unwrap();
     buffer.set_position(screen, 1, terminal_height-2);
     write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
-    let line_iterator = &buffer.lines[..height];
+    let start_index: usize = terminal_height as usize-2;
+
+    let line_iterator = &buffer.lines[height-start_index..height];
 
     for (inde, (line_number, line)) in line_iterator.iter().enumerate() { 
         let index = inde as i16+1;

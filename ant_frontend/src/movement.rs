@@ -9,10 +9,12 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
         
-
+        let (_terminal_width,terminal_height) = termion::terminal_size().unwrap();
         let possible_width = buffer.lines[height].1.chars().count();
 
-        if !(width>=possible_width+5) {
+        if height==(terminal_height as usize)-2 {
+            ()
+        } else if !(width>=possible_width+5) {
 
             buffer.set_position(screen, buffer.current_x, buffer.current_y+1);
 
