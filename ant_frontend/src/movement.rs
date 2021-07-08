@@ -1,5 +1,6 @@
 use std::io::Write;
 use crate::buffer::DefaultBuffer;
+use crate::draw::{draw_lines, draw_statusline};
 
 
 pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
@@ -8,6 +9,7 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
         
+
         let possible_width = buffer.lines[height].chars().count();
 
         if !(width>=possible_width+5) {
@@ -66,9 +68,11 @@ pub fn move_right(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
     let possible_width = buffer.lines[height-1].chars().count();
 
-    if width!=possible_width+4 {
+    if possible_width==0 {
+       () 
+    } else if width!=possible_width+5 {
         buffer.set_position(screen, buffer.current_x+1, buffer.current_y);
 
         screen.flush().unwrap();
-    }
+    } 
 }

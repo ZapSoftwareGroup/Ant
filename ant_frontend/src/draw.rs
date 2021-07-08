@@ -48,8 +48,11 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
 }
 
 
-pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, last: u16) {
-    let line_iterator = &buffer.lines;
+pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, start: usize, last: usize) {
+    let (terminal_width, terminal_height) = termion::terminal_size().unwrap();
+    buffer.set_position(screen, buffer.current_x, terminal_height-2);
+    write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
+    let line_iterator = &buffer.lines[start..last];
 
     for (line_number, line) in line_iterator.iter().enumerate() { 
         let line_number = (line_number+1) as usize;

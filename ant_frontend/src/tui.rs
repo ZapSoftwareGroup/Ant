@@ -19,7 +19,7 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
 
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
-            draw_lines(screen, buffer, height-2);
+            draw_lines(screen, buffer, 0, (height-2).into());
 
             write!(screen, "").unwrap();
 
@@ -32,10 +32,10 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
 
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
-            draw_lines(screen, buffer, height-2);
+            draw_lines(screen, buffer, 0, (height-1).into());
 
             write!(screen, "").unwrap();
-            
+
             gay_buffer = buffer;
 
             screen.flush().unwrap();
