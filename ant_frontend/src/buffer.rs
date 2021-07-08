@@ -11,7 +11,9 @@ pub struct DefaultBuffer {
     pub line_count: usize,
     pub lines: Vec<(usize,String)>,
     pub current_x: u16,
-    pub current_y: u16
+    pub current_y: u16,
+    pub shown_line: u16,
+    pub shown_first: u16
 }
 
 pub enum Buffer {
@@ -37,6 +39,8 @@ impl Buffer {
             lines: line_vec,
             current_x: 1,
             current_y: 1,
+            shown_line: 0,
+            shown_first: 0
         }
     }
 
@@ -48,7 +52,9 @@ impl Buffer {
             line_count: 1,
             lines: vec![(1,"".to_string())],
             current_x: 1,
-            current_y: 1
+            current_y: 1,
+            shown_line: 0,
+            shown_first: 0
         }
     }
 }

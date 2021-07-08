@@ -13,7 +13,13 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let possible_width = buffer.lines[height].1.chars().count();
 
         if height==(terminal_height as usize)-2 {
-            ()
+            if (buffer.shown_line as usize)!=buffer.line_count {
+                draw_lines(screen, buffer, (buffer.shown_line+1) as usize);
+                buffer.shown_line = buffer.shown_line+1;
+                buffer.shown_first = buffer.shown_first+1;
+                buffer.set_position(screen, width as u16, (height) as u16);
+                screen.flush().unwrap();
+            }
         } else if !(width>=possible_width+5) {
 
             buffer.set_position(screen, buffer.current_x, buffer.current_y+1);
@@ -33,7 +39,7 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 }
 
 pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    if buffer.current_y!=1 {
+    if buffer.shown_first != 1 {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
         
@@ -50,8 +56,7 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
             buffer.set_position(screen, (possible_width+5) as u16, buffer.current_y-1);
 
             screen.flush().unwrap();
-        }
-
+        }  
     }
 }
 

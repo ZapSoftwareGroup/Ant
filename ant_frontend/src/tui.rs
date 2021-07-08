@@ -2,7 +2,7 @@ use std::io::Stdin;
 use std::io::Write;
 use crate::buffer::Buffer;
 use crate::editor::Editor;
-use crate::draw::{draw_lines, draw_statusline};
+use crate::draw::{draw_lines, draw_lines_anon, draw_statusline};
 use crate::keybindings::get_key;
 
 
@@ -20,6 +20,8 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
             draw_lines(screen, buffer, (height-2).into());
+            buffer.shown_line = height-2;
+            buffer.shown_first = 1;
 
             write!(screen, "").unwrap();
 
@@ -32,7 +34,8 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
 
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
-            draw_lines(screen, buffer, (height-1).into());
+            draw_lines_anon(screen, buffer);
+
 
             write!(screen, "").unwrap();
 
