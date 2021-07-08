@@ -10,7 +10,7 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let width = buffer.current_x as usize;
         
 
-        let possible_width = buffer.lines[height].chars().count();
+        let possible_width = buffer.lines[height].1.chars().count();
 
         if !(width>=possible_width+5) {
 
@@ -35,7 +35,7 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
         
-        let possible_width = buffer.lines[height-2].chars().count();
+        let possible_width = buffer.lines[height-2].1.chars().count();
         if possible_width+4>=width {
             buffer.set_position(screen, buffer.current_x, buffer.current_y-1);
             
@@ -66,7 +66,7 @@ pub fn move_right(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     let height = buffer.current_y as usize;
     let width = buffer.current_x as usize;
 
-    let possible_width = buffer.lines[height-1].chars().count();
+    let possible_width = buffer.lines[height-1].1.chars().count();
 
     if possible_width==0 {
        () 

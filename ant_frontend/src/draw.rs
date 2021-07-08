@@ -48,39 +48,36 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
 }
 
 
-pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, start: usize, last: usize) {
+pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
     let (terminal_width, terminal_height) = termion::terminal_size().unwrap();
-    buffer.set_position(screen, buffer.current_x, terminal_height-2);
+    buffer.set_position(screen, 1, terminal_height-2);
     write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
-    let line_iterator = &buffer.lines[start..last];
+    let line_iterator = &buffer.lines[..height];
 
-    for (line_number, line) in line_iterator.iter().enumerate() { 
+    for (inde, (line_number, line)) in line_iterator.iter().enumerate() { 
+        let index = inde as i16+1;
         let line_number = (line_number+1) as usize;
-        if line_number>last as usize {
-            continue;
+        if (line_number>=10)&(line_number<100) {
+            write!(screen, "{}{}{}{}  {}",
+                termion::cursor::Goto(1, index as u16),
+                color::Fg(color::LightYellow),
+                line_number,
+                color::Fg(color::Reset),
+                line).unwrap();
+        } else if (line_number>=100)&(line_number<1000) {
+            write!(screen, "{}{}{}{} {}",
+                termion::cursor::Goto(1, index as u16),
+                color::Fg(color::LightYellow),
+                line_number,
+                color::Fg(color::Reset),
+                line).unwrap();
         } else {
-            if (line_number>=10)&(line_number<100) {
-                write!(screen, "{}{}{}{}  {}",
-                    termion::cursor::Goto(1, line_number as u16),
-                    color::Fg(color::LightYellow),
-                    line_number,
-                    color::Fg(color::Reset),
-                    line).unwrap();
-            } else if (line_number>=100)&(line_number<1000) {
-                write!(screen, "{}{}{}{} {}",
-                    termion::cursor::Goto(1, line_number as u16),
-                    color::Fg(color::LightYellow),
-                    line_number,
-                    color::Fg(color::Reset),
-                    line).unwrap();
-            } else {
-                write!(screen, "{}{}{}{}   {}",
-                    termion::cursor::Goto(1, line_number as u16),
-                    color::Fg(color::LightYellow),
-                    line_number,
-                    color::Fg(color::Reset),
-                    line).unwrap();
-            }
+            write!(screen, "{}{}{}{}   {}",
+                termion::cursor::Goto(1, index as u16),
+                color::Fg(color::LightYellow),
+                line_number,
+                color::Fg(color::Reset),
+                line).unwrap();
         }
     };
     buffer.set_position(screen, 5, 1);
