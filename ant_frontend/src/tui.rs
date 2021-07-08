@@ -23,7 +23,6 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
             buffer.shown_line = height-2;
             buffer.shown_first = 1;
 
-            write!(screen, "").unwrap();
 
             screen.flush().unwrap();
 

@@ -39,7 +39,7 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 }
 
 pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    if buffer.shown_first != 1 {
+    if buffer.current_y != 1 {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
         
@@ -56,7 +56,17 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
             buffer.set_position(screen, (possible_width+5) as u16, buffer.current_y-1);
 
             screen.flush().unwrap();
-        }  
+        }
+
+    } else {
+        let height = buffer.current_y as usize;
+        let width = buffer.current_x as usize;
+
+        draw_lines(screen, buffer, (buffer.shown_line-1) as usize);
+
+        buffer.shown_line = buffer.shown_line+1;
+        buffer.shown_first = buffer.shown_first+1;
+        screen.flush().unwrap();
     }
 }
 
