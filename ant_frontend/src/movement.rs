@@ -58,14 +58,14 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
             screen.flush().unwrap();
         }
 
-    } else {
+    } else if buffer.shown_first > 1 {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
 
         draw_lines(screen, buffer, (buffer.shown_line-1) as usize);
 
-        buffer.shown_line = buffer.shown_line+1;
-        buffer.shown_first = buffer.shown_first+1;
+        buffer.shown_line = buffer.shown_line-1;
+        buffer.shown_first = buffer.shown_first-1;
         screen.flush().unwrap();
     }
 }
