@@ -13,7 +13,8 @@ pub struct DefaultBuffer {
     pub current_x: u16,
     pub current_y: u16,
     pub shown_line: u16,
-    pub shown_first: u16
+    pub shown_first: u16,
+    pub on_last: bool
 }
 
 pub enum Buffer {
@@ -40,7 +41,8 @@ impl Buffer {
             current_x: 1,
             current_y: 1,
             shown_line: 0,
-            shown_first: 0
+            shown_first: 0,
+            on_last: false
         }
     }
 
@@ -54,7 +56,8 @@ impl Buffer {
             current_x: 1,
             current_y: 1,
             shown_line: 0,
-            shown_first: 0
+            shown_first: 0,
+            on_last: false
         }
     }
 }

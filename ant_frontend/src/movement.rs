@@ -10,7 +10,7 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let width = buffer.current_x as usize;
         
         let (_terminal_width,terminal_height) = termion::terminal_size().unwrap();
-        let possible_width = buffer.lines[height].1.chars().count();
+        let possible_width = buffer.lines[buffer.shown_first as usize+height].1.chars().count();
 
         if height==(terminal_height as usize)-2 {
             if (buffer.shown_line as usize)!=buffer.line_count {
@@ -43,7 +43,7 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
         
-        let possible_width = buffer.lines[height-2].1.chars().count();
+        let possible_width = buffer.lines[buffer.shown_first as usize+height-3].1.chars().count();
         if possible_width+4>=width {
             buffer.set_position(screen, buffer.current_x, buffer.current_y-1);
             
@@ -52,7 +52,7 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
             buffer.set_position(screen, 5, buffer.current_y-1);
 
             screen.flush().unwrap();
-        } else if possible_width<width {
+        } else if possible_width+5<width {
             buffer.set_position(screen, (possible_width+5) as u16, buffer.current_y-1);
 
             screen.flush().unwrap();
