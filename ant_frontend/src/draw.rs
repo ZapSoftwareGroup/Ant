@@ -86,10 +86,9 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
 }
 
 pub fn draw_lines_anon(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    let (terminal_width, terminal_height) = termion::terminal_size().unwrap();
+    let (_terminal_width, terminal_height) = termion::terminal_size().unwrap();
     buffer.set_position(screen, 1, terminal_height-2);
     write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
-    let start_index: usize = terminal_height as usize-2;
 
     let line_iterator = &buffer.lines;
 
