@@ -80,10 +80,10 @@ pub fn move_left(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 }
 
 pub fn move_right(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    let height = buffer.current_y as usize;
+    let height = buffer.current_y;
     let width = buffer.current_x as usize;
 
-    let possible_width = buffer.lines[height-1].1.chars().count();
+    let possible_width = buffer.lines[(buffer.shown_first+height-2) as usize].1.chars().count();
 
     if possible_width==0 {
        () 
