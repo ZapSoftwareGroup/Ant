@@ -5,3 +5,4 @@ pub mod editor;
 pub mod draw;
 pub mod keybindings;
 pub mod movement;
+pub mod text;

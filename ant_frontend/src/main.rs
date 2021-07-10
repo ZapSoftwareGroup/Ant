@@ -1,5 +1,4 @@
 use ant::cli;
-// use ant::tui;
 use ant::editor::Editor;
 
 fn main() {
@@ -9,7 +8,6 @@ fn main() {
 
     if blank {
         let mut editor = Editor::new();
-        // tui::render_blank_tui();
         editor.run();
     } else {
         let path = cli::find_full_path(input.as_ref());

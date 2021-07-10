@@ -1,6 +1,7 @@
 use std::io::Write;
 use crate::buffer::DefaultBuffer;
 use termion::color;
+use termion::clear::CurrentLine;
 
 
 const STATUS_FG_COLOR: color::Rgb = color::Rgb(63, 63, 63);
@@ -47,11 +48,10 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
     write!(screen, "{}", color::Fg(color::Reset)).unwrap();
 }
 
-
 pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
     let (terminal_width, terminal_height) = termion::terminal_size().unwrap();
-    buffer.set_position(screen, terminal_width, terminal_height-2);
-    write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
+    // buffer.set_position(screen, terminal_width, terminal_height-2);
+    // write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
     let start_index: usize = terminal_height as usize-2;
 
     let line_iterator = &buffer.lines[height-start_index..height];
@@ -60,22 +60,25 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
         let index = inde as i16+1;
         let line_number = (line_number+1) as usize;
         if (line_number>=10)&(line_number<100) {
-            write!(screen, "{}{}{}{}  {}",
+            write!(screen, "{}{}{}{}{}  {}",
                 termion::cursor::Goto(1, index as u16),
+                CurrentLine,
                 color::Fg(color::LightYellow),
                 line_number,
                 color::Fg(color::Reset),
                 line).unwrap();
         } else if (line_number>=100)&(line_number<1000) {
-            write!(screen, "{}{}{}{} {}",
+            write!(screen, "{}{}{}{}{} {}",
                 termion::cursor::Goto(1, index as u16),
+                CurrentLine,
                 color::Fg(color::LightYellow),
                 line_number,
                 color::Fg(color::Reset),
                 line).unwrap();
         } else {
-            write!(screen, "{}{}{}{}   {}",
+            write!(screen, "{}{}{}{}{}   {}",
                 termion::cursor::Goto(1, index as u16),
+                CurrentLine,
                 color::Fg(color::LightYellow),
                 line_number,
                 color::Fg(color::Reset),

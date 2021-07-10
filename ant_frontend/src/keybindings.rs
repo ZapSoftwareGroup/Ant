@@ -3,7 +3,7 @@ use crate::buffer::DefaultBuffer;
 use termion::event::Key;
 use termion::input::TermRead;
 use crate::movement::*;
-
+use crate::text;
 
 pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultBuffer) {
     for c in stdin.keys() {
@@ -23,6 +23,7 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
             Key::Right => {
                 move_right(screen, buffer);
             },
+            Key::Char(x) => text::insert_char_at_pos(screen, buffer, x),
             _ => ()
         };
 
