@@ -56,6 +56,7 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     } else if buffer.shown_first > 1 {
 
         draw_lines(screen, buffer, (buffer.shown_line-1) as usize);
+        buffer.set_position(screen, buffer.current_x, 1);
 
         buffer.shown_line = buffer.shown_line-1;
         buffer.shown_first = buffer.shown_first-1;
