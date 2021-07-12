@@ -2,6 +2,8 @@ use std::io::Write;
 use crate::buffer::DefaultBuffer;
 use std::char;
 use crate::draw::draw_lines;
+use crate::movement::*;
+
 
 pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     let current_line: usize = (buffer.current_y+buffer.shown_first-1) as usize;
@@ -16,9 +18,10 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     
     // Draw lines
     draw_lines(screen, buffer, (buffer.shown_line) as usize);
-    buffer.set_position(screen, 5, buffer.current_y+1);
-    screen.flush().unwrap();
+
+    move_down(screen, buffer);
 }
+
 pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
     return;
 }

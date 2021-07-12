@@ -20,6 +20,7 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
             draw_lines(screen, buffer, (height-2).into());
+            buffer.set_position(screen, 5, 1);
             buffer.shown_line = height-2;
             buffer.shown_first = 1;
 

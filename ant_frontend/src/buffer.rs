@@ -75,6 +75,7 @@ impl DefaultBuffer {
         self.current_x = x;
         self.current_y = y;
         write!(screen, "{}", termion::cursor::Goto(x, y)).unwrap(); 
+        screen.flush().unwrap();
     }
 
 }

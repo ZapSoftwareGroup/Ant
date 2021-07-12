@@ -85,7 +85,6 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
                 line).unwrap();
         }
     };
-    buffer.set_position(screen, 5, 1);
 }
 
 pub fn draw_lines_anon(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
