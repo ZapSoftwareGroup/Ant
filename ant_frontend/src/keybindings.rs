@@ -25,7 +25,7 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
             },
             Key::Char(x) => {
                 if x == '\n' {
-                    text::insert_newline(screen, buffer, x);
+                    text::insert_newline(screen, buffer);
                 } else {
                     text::insert_char_at_pos(screen, buffer, x);
                     move_right(screen, buffer);
