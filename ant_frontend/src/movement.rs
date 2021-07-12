@@ -10,7 +10,7 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let width = buffer.current_x as usize;
         
         let (_terminal_width,terminal_height) = termion::terminal_size().unwrap();
-        let possible_width = buffer.lines[buffer.shown_first as usize+height].1.chars().count();
+        let possible_width = buffer.lines[buffer.shown_first as usize+height-1].1.chars().count();
 
         if height==(terminal_height as usize)-2 {
             if (buffer.shown_line as usize)!=buffer.line_count {

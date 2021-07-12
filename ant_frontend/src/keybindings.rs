@@ -23,8 +23,15 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
             Key::Right => {
                 move_right(screen, buffer);
             },
-            Key::Char(x) => text::insert_char_at_pos(screen, buffer, x),
-            _ => ()
+            Key::Char(x) => {
+                if x == '\n' {
+                    text::insert_newline(screen, buffer, x);
+                } else {
+                    text::insert_char_at_pos(screen, buffer, x);
+                    move_right(screen, buffer);
+                }
+            },
+            _ => (),
         };
 
     }; 
