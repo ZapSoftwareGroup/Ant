@@ -8,6 +8,7 @@ use crate::movement::*;
 pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     let current_line: usize = (buffer.current_y+buffer.shown_first-1) as usize;
     buffer.lines.insert(current_line, (current_line, "".to_string()));
+    buffer.line_count+=1;
 
     // Add 1 to line number of all lines after newly inserted one
     let mut counter = 0;
