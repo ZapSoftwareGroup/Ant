@@ -19,12 +19,12 @@ pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
                 buffer.shown_first = buffer.shown_first+1;
                 buffer.set_position(screen, width as u16, (height) as u16);
             }
-        } else if !(width>=possible_width+4) {
+        } else if (width<=possible_width+4) {
             buffer.set_position(screen, buffer.current_x, buffer.current_y+1);
 
         } else if possible_width==0 {
             buffer.set_position(screen, 5, buffer.current_y+1);
-        } else if possible_width+4<width {
+        } else if possible_width+4<=width {
             buffer.set_position(screen, (possible_width+4) as u16, buffer.current_y+1);
 
         }
