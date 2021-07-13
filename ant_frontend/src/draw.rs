@@ -48,6 +48,39 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
     write!(screen, "{}", color::Fg(color::Reset)).unwrap();
 }
 
+pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, y_position: usize, index: usize) {
+     // Set cursor position to current line
+     buffer.set_position(screen, 1, y_position as u16);
+
+     // Redraw line
+     let (line_number, text) = &buffer.lines[index];
+
+     if (line_number>=&10)&(line_number<&100) {
+        
+         write!(screen, "{}{}{}{}   {}",
+             CurrentLine,
+             color::Fg(color::LightYellow),
+             line_number,
+             color::Fg(color::Reset),
+             text).unwrap();
+     } else if (line_number>=&100)&(line_number<&1000) {
+            write!(screen, "{}{}{}{} {}",
+                CurrentLine,
+                color::Fg(color::LightYellow),
+                line_number,
+                color::Fg(color::Reset),
+                text).unwrap();
+        } else {
+            write!(screen, "{}{}{}{}   {}",
+                CurrentLine,
+                color::Fg(color::LightYellow),
+                line_number,
+                color::Fg(color::Reset),
+                text).unwrap();
+        }
+
+}
+
 pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
     let (_terminal_width, terminal_height) = termion::terminal_size().unwrap();
     // buffer.set_position(screen, terminal_width, terminal_height-2);

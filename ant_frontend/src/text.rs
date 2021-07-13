@@ -26,3 +26,7 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
     return;
 }
+
+pub fn delete_char(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+    return;
+}

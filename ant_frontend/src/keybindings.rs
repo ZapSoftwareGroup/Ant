@@ -23,6 +23,9 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
             Key::Right => {
                 move_right(screen, buffer);
             },
+            Key::Backspace => {
+                text::delete_char(screen, buffer);
+            },
             Key::Char(x) => {
                 if x == '\n' {
                     text::insert_newline(screen, buffer);
