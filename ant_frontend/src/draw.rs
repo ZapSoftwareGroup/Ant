@@ -121,38 +121,3 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
         }
     };
 }
-
-pub fn draw_lines_anon(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    let (_terminal_width, terminal_height) = termion::terminal_size().unwrap();
-    buffer.set_position(screen, 1, terminal_height-2);
-    write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
-
-    let line_iterator = &buffer.lines;
-
-    for (inde, (line_number, line)) in line_iterator.iter().enumerate() { 
-        let index = inde as i16+1;
-        if (line_number>=&10)&(line_number<&100) {
-            write!(screen, "{}{}{}{}  {}",
-                termion::cursor::Goto(1, index as u16),
-                color::Fg(color::LightYellow),
-                line_number,
-                color::Fg(color::Reset),
-                line).unwrap();
-        } else if (line_number>=&100)&(line_number<&1000) {
-            write!(screen, "{}{}{}{} {}",
-                termion::cursor::Goto(1, index as u16),
-                color::Fg(color::LightYellow),
-                line_number,
-                color::Fg(color::Reset),
-                line).unwrap();
-        } else {
-            write!(screen, "{}{}{}{}   {}",
-                termion::cursor::Goto(1, index as u16),
-                color::Fg(color::LightYellow),
-                line_number,
-                color::Fg(color::Reset),
-                line).unwrap();
-        }
-    };
-    buffer.set_position(screen, 5, 1);
-}

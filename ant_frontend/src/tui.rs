@@ -34,7 +34,7 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
 
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
-            draw_lines_anon(screen, buffer);
+            draw_lines(screen, buffer, (height-2).into());
 
 
             write!(screen, "").unwrap();

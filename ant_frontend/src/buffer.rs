@@ -55,7 +55,7 @@ impl Buffer {
             name: None,
             file_path: None,
             line_count: 1,
-            lines: vec![(1,"".to_string())],
+            lines: vec![(0,"".to_string())],
             current_x: 1,
             current_y: 1,
             shown_line: 0,
