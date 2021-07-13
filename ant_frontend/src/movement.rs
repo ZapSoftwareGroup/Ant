@@ -4,7 +4,7 @@ use crate::draw::draw_lines;
 
 
 pub fn move_down(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    if buffer.current_y!=buffer.line_count as u16 {
+    if buffer.current_y+buffer.shown_first-1!=buffer.line_count as u16 {
 
         let height = buffer.current_y as usize;
         let width = buffer.current_x as usize;
