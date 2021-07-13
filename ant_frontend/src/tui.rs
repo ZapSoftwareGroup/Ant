@@ -2,7 +2,7 @@ use std::io::Stdin;
 use std::io::Write;
 use crate::buffer::Buffer;
 use crate::editor::Editor;
-use crate::draw::{draw_lines, draw_lines_anon, draw_statusline};
+use crate::draw::{draw_lines, draw_statusline};
 use crate::keybindings::get_key;
 
 

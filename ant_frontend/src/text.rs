@@ -20,13 +20,37 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     // Draw lines
     draw_lines(screen, buffer, (buffer.shown_line) as usize);
 
-    move_down(screen, buffer);
 }
 
 pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
     return;
 }
 
-pub fn delete_char(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
-    return;
+pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+
+    let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
+    let (_line_num, text) = &buffer.lines[current_line];
+
+    if (buffer.current_x==5)&(text==&"".to_string())&(buffer.current_y!=1) {
+        let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
+        buffer.lines.remove(current_line);
+        buffer.line_count -= 1;
+
+        let mut counter = 0;
+        for (line_number, _text) in &mut buffer.lines {
+            *line_number = counter;
+            counter += 1;
+        }
+
+        draw_lines(screen, buffer, (buffer.shown_line) as usize);
+
+        move_up(screen, buffer);
+        return;
+    }
+    
+
+    
+
+    screen.flush().unwrap();
+
 }

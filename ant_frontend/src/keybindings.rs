@@ -3,7 +3,7 @@ use crate::buffer::DefaultBuffer;
 use termion::event::Key;
 use termion::input::TermRead;
 use crate::movement::*;
-use crate::text;
+use crate::text::*;
 
 pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultBuffer) {
     for c in stdin.keys() {
@@ -24,13 +24,14 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
                 move_right(screen, buffer);
             },
             Key::Backspace => {
-                text::delete_char(screen, buffer);
+                delete_char_or_newline(screen, buffer);
             },
             Key::Char(x) => {
                 if x == '\n' {
-                    text::insert_newline(screen, buffer);
+                    insert_newline(screen, buffer);
+                    move_down(screen, buffer);
                 } else {
-                    text::insert_char_at_pos(screen, buffer, x);
+                    insert_char_at_pos(screen, buffer, x);
                     move_right(screen, buffer);
                 }
             },
