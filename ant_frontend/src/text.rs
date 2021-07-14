@@ -22,14 +22,22 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
 }
 
-pub fn insert_char_at_pos(_screen: &mut impl Write, _buffer: &mut DefaultBuffer, _char: char) {
+pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
+    let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
+    let current_position = (buffer.current_x-5) as usize;
+    buffer.lines[current_line].1.insert(current_position, char);
 
+    draw_line(screen, buffer, (current_position+5) as u16, current_line); 
+    screen.flush().unwrap();
 }
 
 pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
-    let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
-    let (_line_num, text) = &buffer.lines[current_line];
+    let mut current_line = (buffer.current_y+buffer.shown_first-1) as isize;
+    if (buffer.current_y!=1) {
+        current_line = (buffer.current_y+buffer.shown_first-3) as isize;
+    }
+    let (_line_num, text) = &buffer.lines[current_line as usize];
 
     if (buffer.current_x==5)&(text==&"".to_string())&(buffer.current_y!=1) {
         let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
@@ -53,10 +61,11 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
     if buffer.current_x != 5 {
         buffer.lines[current_line].1.remove(current_position-1);
 
-        draw_line(screen, buffer,  (current_position+5) as u16, current_line); 
+        draw_line(screen, buffer, (current_position+5) as u16, current_line); 
+      
 
         move_left(screen, buffer);
-    }
-    screen.flush().unwrap();
+     }
+     screen.flush().unwrap();
 
 }
