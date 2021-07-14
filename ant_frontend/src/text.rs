@@ -1,7 +1,7 @@
 use std::io::Write;
 use crate::buffer::DefaultBuffer;
 use std::char;
-use crate::draw::{draw_lines, draw_lines_clear_screen};
+use crate::draw::{draw_lines, draw_line};
 use crate::movement::*;
 
 
@@ -23,7 +23,7 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 }
 
 pub fn insert_char_at_pos(_screen: &mut impl Write, _buffer: &mut DefaultBuffer, _char: char) {
-    return;
+
 }
 
 pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
@@ -43,14 +43,20 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
             counter += 1;
         }
 
-        // FIXME: Error is caused because previous lines aren't getting cleared. 
-        draw_lines_clear_screen(screen, buffer, (buffer.shown_line) as usize);
+        draw_lines(screen, buffer, (buffer.shown_line) as usize);
         move_up(screen, buffer);
+        return;
     }
-    
 
-    
+    let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
+    let current_position = (buffer.current_x-5) as usize;
+    if buffer.current_x != 5 {
+        buffer.lines[current_line].1.remove(current_position-1);
 
+        draw_line(screen, buffer,  (current_position+5) as u16, current_line); 
+
+        move_left(screen, buffer);
+    }
     screen.flush().unwrap();
 
 }

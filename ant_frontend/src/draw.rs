@@ -48,9 +48,9 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
     write!(screen, "{}", color::Fg(color::Reset)).unwrap();
 }
 
-pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, y_position: usize, index: usize) {
+pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16, index: usize) {
      // Set cursor position to current line
-     buffer.set_position(screen, 1, y_position as u16);
+     buffer.set_position(screen, 1, buffer.current_y as u16);
 
      // Redraw line
      let (line_number, text) = &buffer.lines[index];
@@ -60,69 +60,30 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, y_position
          write!(screen, "{}{}{}{}   {}",
              CurrentLine,
              color::Fg(color::LightYellow),
-             line_number,
+             line_number+1,
              color::Fg(color::Reset),
              text).unwrap();
      } else if (line_number>=&100)&(line_number<&1000) {
             write!(screen, "{}{}{}{} {}",
                 CurrentLine,
                 color::Fg(color::LightYellow),
-                line_number,
+                line_number+1,
                 color::Fg(color::Reset),
                 text).unwrap();
         } else {
             write!(screen, "{}{}{}{}   {}",
                 CurrentLine,
                 color::Fg(color::LightYellow),
-                line_number,
+                line_number+1,
                 color::Fg(color::Reset),
                 text).unwrap();
         }
 
+        buffer.set_position(screen, x_pos, buffer.current_y);
+
 }
 
 pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
-    let (_terminal_width, terminal_height) = termion::terminal_size().unwrap();
-    // buffer.set_position(screen, terminal_width, terminal_height-2);
-    // write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
-    let start_index: usize = terminal_height as usize-2;
-
-    let begin_index = height-start_index;
-    let end_index = if buffer.line_count<height { buffer.line_count } else { height };
-    let line_iterator = &buffer.lines[begin_index..end_index];
-
-    for (inde, (line_number, line)) in line_iterator.iter().enumerate() { 
-        let index = inde as i16+1;
-        let line_number = (line_number+1) as usize;
-        if (line_number>=10)&(line_number<100) {
-            write!(screen, "{}{}{}{}{}  {}",
-                termion::cursor::Goto(1, index as u16),
-                CurrentLine,
-                color::Fg(color::LightYellow),
-                line_number,
-                color::Fg(color::Reset),
-                line).unwrap();
-        } else if (line_number>=100)&(line_number<1000) {
-            write!(screen, "{}{}{}{}{} {}",
-                termion::cursor::Goto(1, index as u16),
-                CurrentLine,
-                color::Fg(color::LightYellow),
-                line_number,
-                color::Fg(color::Reset),
-                line).unwrap();
-        } else {
-            write!(screen, "{}{}{}{}{}   {}",
-                termion::cursor::Goto(1, index as u16),
-                CurrentLine,
-                color::Fg(color::LightYellow),
-                line_number,
-                color::Fg(color::Reset),
-                line).unwrap();
-        }
-    };
-}
-
-pub fn draw_lines_clear_screen(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
     let (terminal_width,terminal_height) = termion::terminal_size().unwrap();
     // buffer.set_position(screen, terminal_width, terminal_height-2);
     // write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
