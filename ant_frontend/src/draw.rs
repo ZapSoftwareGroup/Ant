@@ -1,5 +1,7 @@
 use std::io::Write;
 use crate::buffer::DefaultBuffer;
+
+
 use termion::{clear, color};
 use termion::clear::CurrentLine;
 

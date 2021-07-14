@@ -1,8 +1,7 @@
 use std::path::PathBuf;
-
+use std::io::{Error, Write};
 use std::fs;
 use std::str::Lines;
-use std::io::Write;
 
 
 pub struct DefaultBuffer {
@@ -76,6 +75,18 @@ impl DefaultBuffer {
         self.current_y = y;
         write!(screen, "{}", termion::cursor::Goto(x, y)).unwrap(); 
         screen.flush().unwrap();
+    }
+
+    pub fn save(&mut self) -> Result<(), Error> {
+        if let Some(file_path) = &self.file_path {
+            let mut file = fs::File::create(file_path)?;
+            for (_num, row) in &mut self.lines {
+                file.write_all(row.as_bytes())?;
+                file.write_all(b"\n")?;
+            }
+
+        }
+        Ok(())
     }
 
 }

@@ -35,6 +35,9 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
                     move_right(screen, buffer);
                 }
             },
+            Key::Ctrl('s') => {
+                buffer.save();
+            },
             _ => (),
         };
 
