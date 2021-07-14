@@ -52,14 +52,16 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
 
 pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16, index: usize) {
      // Set cursor position to current line
-     buffer.set_position(screen, 1, buffer.current_y as u16);
+     let (terminal_width, _terminal_height) = termion::terminal_size().unwrap();
+     buffer.set_position(screen, terminal_width, buffer.current_y as u16);
+     buffer.set_position(screen,1,buffer.current_y);
 
      // Redraw line
      let (line_number, text) = &buffer.lines[index];
 
      if (line_number>=&10)&(line_number<&100) {
         
-         write!(screen, "{}{}{}{}   {}",
+         write!(screen, "{}{}{}{}  {}",
              CurrentLine,
              color::Fg(color::LightYellow),
              line_number+1,

@@ -1,6 +1,7 @@
 use clap::{Arg, App};
 use std::path::{PathBuf, Path};
 use std::fs::File;
+use std::io::{self, Write};
 
 
 pub fn cli_matches() -> String {
@@ -18,14 +19,16 @@ pub fn cli_matches() -> String {
     input.to_string()
 }
 
-pub fn find_full_path(path: &str) -> PathBuf {
+pub fn find_full_path(path: &str) -> Result<PathBuf, io::Error> {
     let new_path = Path::new(path);
 
     if new_path.exists() {
-        new_path.to_path_buf()
+        Ok(new_path.to_path_buf())
     } else {
-        let _file = File::create(new_path);
-        new_path.to_path_buf()
+        let mut file = File::create(new_path)?;
+
+        file.write_all(b"\n")?;
+        Ok(new_path.to_path_buf())
     }
 }
 
