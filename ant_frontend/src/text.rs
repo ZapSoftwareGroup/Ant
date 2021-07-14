@@ -1,6 +1,4 @@
 use std::io::Write;
-use termion::clear;
-
 use crate::buffer::DefaultBuffer;
 use std::char;
 use crate::draw::{draw_lines, draw_lines_clear_screen};
@@ -24,7 +22,7 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
 }
 
-pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
+pub fn insert_char_at_pos(_screen: &mut impl Write, _buffer: &mut DefaultBuffer, _char: char) {
     return;
 }
 
