@@ -20,7 +20,7 @@ This is mainly a learning project, but there are some good reasons to use `ant`:
 
 ## Features
 
-List of features that are complete, and not so complete:
+List of features that are complete, and not so complete. Not in exact order:
 
 - [x] Open and create a file
 
@@ -34,7 +34,7 @@ List of features that are complete, and not so complete:
 
 - [ ] Allow anonymous buffers (incomplete)
 
-- [ ] Require sudo to open or create a protected file
+- [x] Require sudo to open or create a protected file
 
 - [ ] Allow syntax highlighting
 
@@ -52,9 +52,11 @@ List of features that are complete, and not so complete:
 
 - [ ] Allow custom commands
 
+- [ ] Allow moving to line by doing `:{linenumber}`
+
 - [ ] Codebase refactor
 
-- [ ] 
+- [ ] Undo and Redo
 
 ## Installation
 
