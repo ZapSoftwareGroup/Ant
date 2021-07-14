@@ -89,3 +89,8 @@ pub fn move_right(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         buffer.on_last = true;
     }
 }
+
+
+
+
+

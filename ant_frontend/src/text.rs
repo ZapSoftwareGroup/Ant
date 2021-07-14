@@ -1,7 +1,9 @@
 use std::io::Write;
+use termion::clear;
+
 use crate::buffer::DefaultBuffer;
 use std::char;
-use crate::draw::draw_lines;
+use crate::draw::{draw_lines, draw_lines_clear_screen};
 use crate::movement::*;
 
 
@@ -36,16 +38,16 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
         buffer.lines.remove(current_line);
         buffer.line_count -= 1;
 
+
         let mut counter = 0;
         for (line_number, _text) in &mut buffer.lines {
             *line_number = counter;
             counter += 1;
         }
 
-        draw_lines(screen, buffer, (buffer.shown_line) as usize);
-
+        // FIXME: Error is caused because previous lines aren't getting cleared. 
+        draw_lines_clear_screen(screen, buffer, (buffer.shown_line) as usize);
         move_up(screen, buffer);
-        return;
     }
     
 
