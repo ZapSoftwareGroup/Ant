@@ -35,15 +35,11 @@ pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, c
 
 pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
-    let mut current_line = (buffer.current_y+buffer.shown_first-1) as isize;
-    if buffer.current_y!=1 {
-        current_line = (buffer.current_y+buffer.shown_first-3) as isize;
-    }
-    let (_line_num, text) = &buffer.lines[current_line as usize];
+    let current_line = (buffer.current_y+buffer.shown_first-1) as isize;
+    let (_line_num, text) = &buffer.lines[current_line as usize-1];
 
     if (buffer.current_x==5)&(text==&"".to_string())&(buffer.current_y!=1) {
-        let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
-        write!(screen, "{}", buffer.current_y).unwrap();
+        let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
         buffer.lines.remove(current_line);
         buffer.line_count -= 1;
 

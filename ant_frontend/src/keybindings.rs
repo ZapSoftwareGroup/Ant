@@ -36,7 +36,7 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
                 }
             },
             Key::Ctrl('s') => {
-                buffer.save();
+                buffer.save().unwrap();
             },
             _ => (),
         };
