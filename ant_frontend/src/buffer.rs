@@ -13,12 +13,18 @@ pub struct DefaultBuffer {
     pub current_y: u16,
     pub shown_line: u16,
     pub shown_first: u16,
+    pub first_char: u16,
     pub on_last: bool
 }
 
 pub enum Buffer {
     Anon(DefaultBuffer),
     Default(DefaultBuffer)
+}
+
+pub fn find_first_char(lines: usize) -> u16 {
+
+    if lines<10 { 5 } else if (lines>9)&(lines<100) { 6 } else if (lines>99)&(lines<1000) { 7 } else if (lines>999)&(lines<1000) { 8 } else {9}
 }
 
 fn to_vec(file_str: &str) -> Vec<(usize, String)> {
@@ -34,7 +40,9 @@ impl Buffer {
         let line_vec = to_vec(file_string.as_ref());
 
         let lines = line_vec.len();
-        
+
+        let first_char = find_first_char(lines);
+
 
         DefaultBuffer {
             name,
@@ -45,20 +53,23 @@ impl Buffer {
             current_y: 1,
             shown_line: 0,
             shown_first: 0,
+            first_char,
             on_last: false
         }
     }
 
     pub fn new_buffer() -> DefaultBuffer {
+        let line_vec = vec![(0, " ".to_string())];
         DefaultBuffer { 
             name: None,
             file_path: None,
             line_count: 1,
-            lines: vec![(0," ".to_string())],
+            lines: line_vec,
             current_x: 1,
             current_y: 1,
             shown_line: 0,
             shown_first: 0,
+            first_char: 5,
             on_last: false
         }
     }

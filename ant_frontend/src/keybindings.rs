@@ -30,6 +30,7 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
                 if x == '\n' {
                     insert_newline(screen, buffer);
                     move_down(screen, buffer);
+                    buffer.set_position(screen, buffer.first_char, buffer.current_y);
                 } else {
                     insert_char_at_pos(screen, buffer, x);
                     move_right(screen, buffer);
