@@ -59,7 +59,7 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16
      // Redraw line
      let (line_number, text) = &buffer.lines[index];
 
-     if (line_number>=&10)&(line_number<&100) {
+     if (line_number>=&11)&(line_number<&100) {
         
          write!(screen, "{}{}{}{}  {}",
              CurrentLine,
@@ -89,8 +89,6 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16
 
 pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
     let (terminal_width,terminal_height) = termion::terminal_size().unwrap();
-    // buffer.set_position(screen, terminal_width, terminal_height-2);
-    // write!(screen, "{}", termion::clear::BeforeCursor).unwrap();
     let start_index: usize = terminal_height as usize-2;
     write!(screen, "{}", termion::cursor::Goto(terminal_width-1, terminal_height-2)).unwrap();
     write!(screen, "{}", clear::BeforeCursor).unwrap();
@@ -101,7 +99,7 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
     for (inde, (line_number, line)) in line_iterator.iter().enumerate() { 
         let index = inde as i16+1;
         let line_number = (line_number+1) as usize;
-        if (line_number>=10)&(line_number<100) {
+        if (line_number>9)&(line_number<100) {
             write!(screen, "{}{}{}{}  {}",
                 termion::cursor::Goto(1, index as u16),
                 color::Fg(color::LightYellow),
