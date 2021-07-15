@@ -32,7 +32,11 @@ List of features that are complete, and not so complete. Not in exact order:
 
 - [x] Allow saving file to disk
 
-- [ ] Allow anonymous buffers (incomplete)
+- [x] Allow anonymous buffers
+
+- [ ] Allow longer lines
+
+- [ ] Allow lines >1000
 
 - [x] Require sudo to open or create a protected file
 
