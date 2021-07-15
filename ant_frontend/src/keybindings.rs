@@ -28,13 +28,8 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
             },
             Key::Char(x) => {
                 if x == '\n' {
-                    if let None = &buffer.name {
-                        insert_newline_anon(screen, buffer);
-                        move_down(screen, buffer);
-                    } else {
-                        insert_newline(screen, buffer);
-                        move_down(screen, buffer);
-                    }
+                    insert_newline(screen, buffer);
+                    move_down(screen, buffer);
                 } else {
                     insert_char_at_pos(screen, buffer, x);
                     move_right(screen, buffer);
