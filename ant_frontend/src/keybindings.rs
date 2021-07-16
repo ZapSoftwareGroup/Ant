@@ -31,9 +31,10 @@ pub fn get_key(screen: &mut impl Write, stdin: &mut Stdin, buffer: &mut DefaultB
                     insert_newline(screen, buffer);
                     move_down(screen, buffer);
                     buffer.set_position(screen, buffer.first_char, buffer.current_y);
+                } else if x == '\t' {
+                    insert_tab(screen, buffer);
                 } else {
                     insert_char_at_pos(screen, buffer, x);
-                    move_right(screen, buffer);
                 }
             },
             Key::Ctrl('s') => {

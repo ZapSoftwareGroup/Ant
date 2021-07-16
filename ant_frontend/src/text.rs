@@ -23,13 +23,28 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
 }
 
+pub fn insert_tab(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
+    // Insert a tab
+    let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
+    let current_position = (buffer.current_x-buffer.first_char) as usize;
+    for _count in 0..4 {
+        buffer.lines[current_line].1.insert(current_position, ' ');
+        move_right(screen, buffer);
+    }
+
+
+    draw_line(screen, buffer, buffer.current_x, current_line); 
+}
+
 pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
     let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
     let current_position = (buffer.current_x-buffer.first_char) as usize;
     buffer.lines[current_line].1.insert(current_position, char);
 
+    move_right(screen, buffer);
 
-    draw_lines(screen, buffer, (buffer.shown_line) as usize); 
+
+    draw_line(screen, buffer, buffer.current_x, current_line); 
 }
 
 pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
