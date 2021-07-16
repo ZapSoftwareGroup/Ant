@@ -34,7 +34,7 @@ List of features that are complete, and not so complete. Not in exact order:
 
 - [x] Allow anonymous buffers
 
-- [ ] Allow longer lines
+- [x] Allow longer lines
 
 - [ ] Allow lines >1000
 
