@@ -63,7 +63,7 @@ pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, c
 pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
     let current_line = (buffer.current_y+buffer.shown_first-1) as isize;
-    let (_line_num, text) = &buffer.lines[current_line as usize-2];
+    let (_line_num, text) = &buffer.lines[current_line as usize-1];
 
     if (buffer.current_x==buffer.first_char)&(text==&"".to_string())&(buffer.current_y!=1) {
         let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
@@ -92,6 +92,25 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
       
 
         move_left(screen, buffer);
-     }
+     } else if (buffer.current_x == buffer.first_char)&(buffer.shown_first+buffer.current_y-1!=1) {
+        // remove this clone
+        let substring = &buffer.lines[current_line].1.clone();
+        buffer.lines[current_line-1].1.push_str(substring.as_ref());
+        let length = buffer.lines[current_line-1].1.len();
+        buffer.lines.remove(current_line);
+        buffer.line_count -= 1;
+        buffer.first_char = find_first_char(buffer.line_count);
 
+        let mut counter = 0;
+        for (line_number, _text) in &mut buffer.lines {
+            *line_number = counter;
+            counter += 1;
+        }
+
+        draw_lines(screen, buffer, buffer.shown_line as usize);
+        move_up(screen, buffer);
+        for _i in 0..length as u16 {
+            move_right(screen, buffer);
+        }
+    }  
 }
