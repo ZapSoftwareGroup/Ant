@@ -36,7 +36,11 @@ List of features that are complete, and not so complete. Not in exact order:
 
 - [x] Allow longer lines
 
-- [ ] Allow lines >1000
+- [x] Use tabs instead of spaces
+
+- [ ] Pressing return mid-line should move rest of text to next line
+
+- [x] Allow lines >1000
 
 - [x] Require sudo to open or create a protected file
 
