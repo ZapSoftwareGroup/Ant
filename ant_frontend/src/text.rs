@@ -95,8 +95,8 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
      } else if (buffer.current_x == buffer.first_char)&(buffer.shown_first+buffer.current_y-1!=1) {
         // remove this clone
         let substring = &buffer.lines[current_line].1.clone();
-        buffer.lines[current_line-1].1.push_str(substring.as_ref());
         let length = buffer.lines[current_line-1].1.len();
+        buffer.lines[current_line-1].1.push_str(substring.as_ref());
         buffer.lines.remove(current_line);
         buffer.line_count -= 1;
         buffer.first_char = find_first_char(buffer.line_count);
