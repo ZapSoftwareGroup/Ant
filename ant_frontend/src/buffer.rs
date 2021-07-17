@@ -4,6 +4,8 @@ use std::io::{Error, Write};
 use std::fs;
 use std::str::Lines;
 use std::collections::HashMap;
+use crate::message::display_message_save;
+use crate::prompt::*;
 
 
 pub struct DefaultBuffer {
@@ -17,7 +19,10 @@ pub struct DefaultBuffer {
     pub shown_first: u16,
     pub first_char: u16,
     pub on_last: bool,
-    pub filetype: Option<String>
+    pub filetype: Option<String>,
+    pub in_prompt: bool,
+    pub current_prompt: &'static str,
+    pub prompt: String
 }
 
 pub enum Buffer {
@@ -39,7 +44,11 @@ pub fn find_first_char(lines: usize) -> u16 {
         9
     } else if (lines>99999)&(lines<1000000) { 
         10
-    } else { 11 }
+    } else if (lines>999999)&(lines<10000000) {
+        11 
+    } else if (lines>9999999)&(lines<100000000) { 
+        12 
+    } else { 13 }
 }
 
 fn to_vec(file_str: &str) -> Vec<(usize, String)> {
@@ -111,7 +120,10 @@ impl Buffer {
             shown_first: 0,
             first_char,
             on_last: false,
-            filetype: Some(filetype)
+            filetype: Some(filetype),
+            in_prompt: false,
+            current_prompt: "",
+            prompt: String::new()
         }
     }
 
@@ -128,7 +140,10 @@ impl Buffer {
             shown_first: 0,
             first_char: 5,
             on_last: false,
-            filetype: None
+            filetype: None,
+            in_prompt: false,
+            current_prompt: "",
+            prompt: String::new()
         }
     }
 }
@@ -146,14 +161,19 @@ impl DefaultBuffer {
         screen.flush().unwrap();
     }
 
-    pub fn save(&mut self) -> Result<(), Error> {
+    pub fn save(&mut self, screen: &mut impl Write) -> Result<(), Error> {
         if let Some(file_path) = &self.file_path {
             let mut file = fs::File::create(file_path)?;
             for (_num, row) in &mut self.lines {
                 file.write_all(row.as_bytes())?;
                 file.write_all(b"\n")?;
             }
+            display_message_save(screen, self, "Successfully wrote to file");
 
+        } else {
+            self.in_prompt = true; 
+            self.current_prompt = "Create a file: ";
+            prompt(screen, self, self.current_prompt);
         }
         Ok(())
     }
