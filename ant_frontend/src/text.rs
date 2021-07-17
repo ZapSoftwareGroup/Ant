@@ -67,7 +67,7 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
 
     if (buffer.current_x==buffer.first_char)&(text==&"".to_string())&(buffer.current_y!=1) {
         let current_line = (buffer.current_y+buffer.shown_first-3) as usize;
-        buffer.lines.remove(current_line);
+        buffer.lines.remove(current_line+1);
         buffer.line_count -= 1;
         buffer.first_char = find_first_char(buffer.line_count);
 

@@ -6,3 +6,5 @@ pub mod draw;
 pub mod keybindings;
 pub mod movement;
 pub mod text;
+pub mod message;
+pub mod prompt;

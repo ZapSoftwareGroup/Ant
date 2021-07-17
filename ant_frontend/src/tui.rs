@@ -8,14 +8,12 @@ use crate::keybindings::get_key;
 
 pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &mut Stdin) {
     let height = editor.terminal_height;
-    let width = editor.terminal_width;
 
     let gay_buffer;
 
     match &mut editor.buffers[0] {
         Buffer::Default(buffer) => {
 
-            draw_statusline(screen, buffer, height, width);
 
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
@@ -24,13 +22,13 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
             buffer.shown_line = height-2;
             buffer.shown_first = 1;
 
+            draw_statusline(screen, buffer);
 
             screen.flush().unwrap();
 
             gay_buffer = buffer
         },
         Buffer::Anon(buffer) => {
-            draw_statusline(screen, buffer, height, width);
 
             write!(screen, "{}", termion::cursor::Goto(1, 1)).unwrap();
 
@@ -38,6 +36,8 @@ pub fn render_tui(editor: &mut Editor<Buffer>, screen: &mut impl Write, stdin: &
             buffer.set_position(screen, buffer.first_char, 1);
             buffer.shown_line = height-2;
             buffer.shown_first = 1;
+
+            draw_statusline(screen, buffer);
 
             write!(screen, "").unwrap();
 

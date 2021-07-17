@@ -1,7 +1,5 @@
 use std::io::Write;
 use crate::buffer::DefaultBuffer;
-
-
 use termion::cursor::Goto;
 use termion::{clear, color};
 use termion::clear::CurrentLine;
@@ -10,21 +8,25 @@ use termion::clear::CurrentLine;
 const STATUS_FG_COLOR: color::Rgb = color::Rgb(63, 63, 63);
 const STATUS_BG_COLOR: color::Rgb = color::Rgb(239, 239, 239);
 
-pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u16, width: u16) {
+pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
+    let (move_to_x, move_to_y) = (buffer.current_x, buffer.current_y);
+
+    let (width, height) = termion::terminal_size().unwrap();
     write!(screen, "{}", termion::cursor::Goto(1, height-1)).unwrap();
 
     let width = width as usize;
 
-    let mut file_name = "[No Name]".to_string();
-    let mut file_path = "".to_string();
+    let mut file_name = &("[No Name]".to_string());
+    let mut file_path = &("".to_string());
+    let mut file_type = &String::from("Plain Text");
 
     if let Some(name) = &buffer.name {
-        file_name = name.clone();
+        file_name = name;
     }
     
     if let Some(path) = &buffer.file_path {
-        file_path = path.clone();
+        file_path = path;
     }
 
     let mut status = format!(
@@ -33,10 +35,15 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
         buffer.line_count
     );
 
+    if let Some(filetype) = &buffer.filetype {
+        file_type = filetype;
+    }
+
     let buffer_indicator = format!(
-        "{} | {}/{}",
+        "{} | {} | {}/{}",
+        file_type,
         file_path,
-        buffer.current_x,
+        buffer.current_x-5,
         buffer.current_y
     );
 
@@ -49,6 +56,7 @@ pub fn draw_statusline(screen: &mut impl Write, buffer: &mut DefaultBuffer, heig
     write!(screen, "{}\r", status).unwrap();
     write!(screen, "{}", color::Bg(color::Reset)).unwrap();
     write!(screen, "{}", color::Fg(color::Reset)).unwrap();
+    buffer.set_position(screen, move_to_x, move_to_y);
 }
 
 pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16, index: usize) {
