@@ -34,15 +34,19 @@ List of features that are complete, and not so complete. Not in exact order:
 
 - [x] Allow anonymous buffers
 
-- [x] Allow longer lines
+- [ ] Allow longer lines
 
 - [x] Use tabs instead of spaces
 
-- [ ] Pressing return mid-line should move rest of text to next line
+- [x] Pressing return mid-line should move rest of text to next line
 
 - [x] Allow lines >1000
 
 - [x] Require sudo to open or create a protected file
+
+- [x] Display messages on save and such
+
+- [ ] Allow multiple buffers
 
 - [ ] Allow syntax highlighting
 
