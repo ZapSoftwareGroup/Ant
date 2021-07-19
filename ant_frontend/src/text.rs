@@ -51,7 +51,7 @@ pub fn insert_tab(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
 pub fn insert_char_at_pos(screen: &mut impl Write, buffer: &mut DefaultBuffer, char: char) {
     let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
-    let current_position = (buffer.current_x-buffer.first_char) as usize;
+    let current_position = (buffer.current_x+buffer.starting_index-buffer.first_char-1) as usize;
     buffer.lines[current_line].1.insert(current_position, char);
 
     move_right(screen, buffer);
@@ -84,9 +84,9 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
     }
 
     let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
-    let current_position = (buffer.current_x-buffer.first_char) as usize;
+    let current_position = (buffer.current_x+buffer.starting_index-buffer.first_char-1) as usize;
     if buffer.current_x != buffer.first_char {
-        buffer.lines[current_line].1.remove(current_position-1);
+        buffer.lines[current_line].1.remove(current_position);
 
         draw_line(screen, buffer, buffer.current_x, current_line); 
       

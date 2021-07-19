@@ -73,10 +73,17 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
 
 pub fn move_left(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     if buffer.current_x!=buffer.first_char {
-        buffer.set_position(screen, buffer.current_x-1, buffer.current_y);
+        if (buffer.starting_index>1)&(buffer.current_x==buffer.first_char+1) {
+            buffer.starting_index -= 1;
+            draw_lines(screen, buffer, buffer.shown_line as usize);
+            draw_statusline(screen, buffer);
+            screen.flush().unwrap();
+        } else {
+            buffer.set_position(screen, buffer.current_x-1, buffer.current_y);
 
-        draw_statusline(screen, buffer);
-        screen.flush().unwrap();
+            draw_statusline(screen, buffer);
+            screen.flush().unwrap();
+        }
 
     }
 }
@@ -85,12 +92,11 @@ pub fn move_right(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     let height = buffer.current_y;
     let current_x = buffer.current_x as usize;
     let (terminal_width, _terminal_height) = termion::terminal_size().unwrap();
-    let allowed_chars = terminal_width - buffer.first_char;
     let possible_width = buffer.lines[(buffer.shown_first+height-2) as usize].1.chars().count();
 
 
     if current_x==terminal_width as usize {
-        if (current_x-buffer.first_char as usize)<possible_width as usize {
+        if (buffer.starting_index as usize) < (possible_width - terminal_width as usize+5) {
             buffer.starting_index += 1;
             draw_lines(screen, buffer, buffer.shown_line as usize);
             draw_statusline(screen, buffer);
