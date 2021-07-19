@@ -63,6 +63,8 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16
      // Set cursor position to current line
      buffer.set_position(screen,1,buffer.current_y);
 
+     let (terminal_width,_terminal_height) = termion::terminal_size().unwrap();
+     
      // Redraw line
      let (line_number, text) = &buffer.lines[index];
 
@@ -72,11 +74,21 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16
          line_number+1,
          color::Fg(color::Reset),
          Goto(buffer.first_char, buffer.current_y),
-         text).unwrap();
+         truncate_line(text, buffer, terminal_width)).unwrap();
 
      buffer.set_position(screen, x_pos, buffer.current_y);
 
 }
+
+fn truncate_line<'a>(line: &'a String, buffer: &DefaultBuffer, terminal_width: u16) -> &'a str {
+    let allowed_chars = terminal_width - buffer.first_char + 1;
+    if line.chars().count() < allowed_chars as usize {
+        &line[buffer.starting_index as usize-1..]
+    } else {
+        &line[buffer.starting_index as usize-1..(allowed_chars as usize)+(buffer.starting_index-1) as usize]
+    }
+    
+} 
 
 pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: usize) {
     let (terminal_width,terminal_height) = termion::terminal_size().unwrap();
@@ -96,7 +108,7 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
             line_number,
             color::Fg(color::Reset),
             termion::cursor::Goto(buffer.first_char, index as u16),
-            line).unwrap();
+            truncate_line(line, buffer, terminal_width)).unwrap();
         
     };
 }
