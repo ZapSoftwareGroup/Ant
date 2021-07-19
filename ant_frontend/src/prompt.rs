@@ -1,7 +1,5 @@
 use std::{char, io::Write};
 use crate::buffer::DefaultBuffer;
-use termion::cursor::Goto;
-use crate::draw::draw_statusline;
 
 
 pub fn prompt(screen: &mut impl Write, buffer: &mut DefaultBuffer, prompt: &str) {
@@ -35,6 +33,5 @@ pub fn prompt_return_prompt(screen: &mut impl Write, buffer: &mut DefaultBuffer)
     buffer.name = Some(buffer.prompt.to_string());
     buffer.file_path = Some(buffer.prompt.to_string());
     buffer.save(screen).unwrap();
-    draw_statusline(screen, buffer);
     buffer.set_position(screen, buffer.first_char, 1);
 }

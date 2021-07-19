@@ -1,9 +1,0 @@
-this is a test file
-it includes some text separated on different lines
-the program should be able to load this file to the
-buffer without encountering any problems
-
-there should be no problems with empty lines or
-
-
-weird spaces whatsoever

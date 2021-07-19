@@ -14,7 +14,7 @@ This is mainly a learning project, but there are some good reasons to use `ant`:
 
 - Ant can also serve as an introduction to modal editors in the terminal. (Not ready yet)
 
-- Find a text editor *faster than this. I'll wait.
+- Find a text editor \*faster than this. I'll wait.
 
 \*This value can vary depending on the file.
 
@@ -34,7 +34,9 @@ List of features that are complete, and not so complete. Not in exact order:
 
 - [x] Allow anonymous buffers
 
-- [ ] Allow longer lines
+- [ ] Allow lines longer than the terminal width to extend.
+
+- [ ] Allow copy and paste support
 
 - [x] Use tabs instead of spaces
 
@@ -45,6 +47,8 @@ List of features that are complete, and not so complete. Not in exact order:
 - [x] Require sudo to open or create a protected file
 
 - [x] Display messages on save and such
+
+- [x] Display prompts to save an anonymous buffer
 
 - [ ] Allow multiple buffers
 

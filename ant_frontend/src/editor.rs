@@ -1,6 +1,6 @@
 use termion::screen::AlternateScreen;
 use std::io::{stdin, stdout};
-use crate::buffer::{Buffer};
+use crate::buffer::{DefaultBuffer};
 use std::path::PathBuf;
 use termion::raw::IntoRawMode;
 use crate::tui;
@@ -11,9 +11,9 @@ pub struct Editor<T> {
     pub buffers: Vec<T>
 }
 
-impl Editor<Buffer> {
-    pub fn new() -> Editor<Buffer> {
-        let buffer = Buffer::Anon(Buffer::new_buffer());
+impl Editor<DefaultBuffer> {
+    pub fn new() -> Editor<DefaultBuffer> {
+        let buffer = DefaultBuffer::new_buffer();
         let term_size: (u16, u16) = termion::terminal_size().expect("Don't use windows!");
 
         Editor {
@@ -23,8 +23,8 @@ impl Editor<Buffer> {
         }
     }
 
-    pub fn from(name: String, path: PathBuf) -> Editor<Buffer> {
-        let buffer = Buffer::Default(Buffer::from_buffer(path, Some(name)));
+    pub fn from(name: String, path: PathBuf) -> Editor<DefaultBuffer> {
+        let buffer = DefaultBuffer::from_buffer(path, Some(name));
         let term_size: (u16, u16) = termion::terminal_size().expect("Don't use windows!");
 
         Editor {
@@ -35,7 +35,7 @@ impl Editor<Buffer> {
     }
 
     pub fn new_buffer(&mut self, path: PathBuf, name: Option<String>) {
-        let buffer = Buffer::Default(Buffer::from_buffer(path, name));
+        let buffer = DefaultBuffer::from_buffer(path, name);
         self.buffers.push(buffer);
     }
 

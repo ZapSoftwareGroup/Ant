@@ -4,7 +4,7 @@ use std::io::{Error, Write};
 use std::fs;
 use std::str::Lines;
 use std::collections::HashMap;
-use crate::message::display_message_save;
+use crate::message::display_message;
 use crate::prompt::*;
 
 
@@ -23,11 +23,6 @@ pub struct DefaultBuffer {
     pub in_prompt: bool,
     pub current_prompt: &'static str,
     pub prompt: String
-}
-
-pub enum Buffer {
-    Anon(DefaultBuffer),
-    Default(DefaultBuffer)
 }
 
 pub fn find_first_char(lines: usize) -> u16 {
@@ -89,7 +84,7 @@ fn find_file_type(extension: &str) -> String {
     }
 }
 
-impl Buffer {
+impl DefaultBuffer {
     pub fn from_buffer(file_path: PathBuf, name: Option<String>) -> DefaultBuffer {
         let file_string = fs::read_to_string(&file_path).expect("Could not find file path");
         
@@ -105,9 +100,6 @@ impl Buffer {
             Some(extension) => find_file_type(extension),
             None => "Plain Text".to_string()
         };
-
-
-
 
         DefaultBuffer {
             name,
@@ -146,9 +138,6 @@ impl Buffer {
             prompt: String::new()
         }
     }
-}
-
-impl DefaultBuffer {
 
     pub fn current_position(&self) -> (u16, u16) {
         (self.current_x, self.current_y)
@@ -168,7 +157,16 @@ impl DefaultBuffer {
                 file.write_all(row.as_bytes())?;
                 file.write_all(b"\n")?;
             }
-            display_message_save(screen, self, "Successfully wrote to file");
+            let save_message;
+            if let Some(name) = &self.name {
+                save_message = format!("Successfully wrote to file \"{}\"", name);
+            } else {
+                save_message = format!("Couldn't write to unnamed file");
+            }
+
+            let (current_x, current_y) = (self.current_x, self.current_y);
+            display_message(screen, save_message.as_str());
+            self.set_position(screen, current_x, current_y);
 
         } else {
             self.in_prompt = true; 
