@@ -80,12 +80,19 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16
 
 }
 
-fn truncate_line<'a>(line: &'a String, buffer: &DefaultBuffer, terminal_width: u16) -> &'a str {
+fn truncate_line<'a>(line: &'a str, buffer: &DefaultBuffer, terminal_width: u16) -> String {
     let allowed_chars = terminal_width - buffer.first_char + 1;
-    if line.chars().count() < allowed_chars as usize {
-        &line[buffer.starting_index as usize-1..]
+    let char_count = &line.chars().count();
+    if char_count < &(allowed_chars as usize) {
+        line[buffer.starting_index as usize-1..].to_owned()
     } else {
-        &line[buffer.starting_index as usize-1..(allowed_chars as usize)+(buffer.starting_index-1) as usize]
+        if !((allowed_chars as usize)+(buffer.starting_index-1) as usize >=*char_count) {
+            let return_line = line[buffer.starting_index as usize-1..(allowed_chars as usize)+(buffer.starting_index-1) as usize].to_owned();
+            return_line
+        } else {
+            line[buffer.starting_index as usize-1..].to_owned()
+        }
+
     }
     
 } 
@@ -102,6 +109,9 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
     for (inde, (line_number, line)) in line_iterator.iter().enumerate() { 
         let index = inde+1;
         let line_number = (line_number+1) as usize;
+        if line.chars().count() > buffer.longest_shown as usize {
+            buffer.longest_shown=line.chars().count() as u16;
+        }
         write!(screen, "{}{}{}{}{}{}",
             termion::cursor::Goto(1, index as u16),
             color::Fg(color::LightYellow),
@@ -109,6 +119,5 @@ pub fn draw_lines(screen: &mut impl Write, buffer: &mut DefaultBuffer, height: u
             color::Fg(color::Reset),
             termion::cursor::Goto(buffer.first_char, index as u16),
             truncate_line(line, buffer, terminal_width)).unwrap();
-        
     };
 }

@@ -13,6 +13,7 @@ pub fn insert_newline(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
     if current_position == possible_width as u16 {
         buffer.lines.insert(current_line, (current_line, "".to_string()));
         buffer.line_count+=1;
+        buffer.starting_index = 1;
         buffer.first_char = find_first_char(buffer.line_count);
     } else {
         // delete original end of line
