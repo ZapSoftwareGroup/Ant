@@ -16,7 +16,7 @@ This is mainly a learning project, but there are some good reasons to use `ant`:
 
 - Find a text editor \*faster than this. I'll wait.
 
-\*This value can vary depending on the file.
+\*This value can vary depending on the text editor.
 
 ## Features
 
