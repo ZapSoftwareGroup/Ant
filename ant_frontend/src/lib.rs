@@ -1,10 +1,10 @@
 pub mod cli;
-pub mod tui;
-pub mod buffer;
+mod tui;
+mod buffer;
 pub mod editor;
-pub mod draw;
-pub mod keybindings;
-pub mod movement;
-pub mod text;
-pub mod message;
-pub mod prompt;
+mod draw;
+mod keybindings;
+mod movement;
+mod text;
+mod message;
+mod prompt;
