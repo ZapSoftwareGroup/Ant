@@ -44,6 +44,7 @@ pub fn move_up(screen: &mut impl Write, buffer: &mut DefaultBuffer) {
         let width = buffer.current_x as usize;
         
         let possible_width = buffer.lines[buffer.shown_first as usize+height-3].1.chars().count();
+        write!(screen, "{}", possible_width);
         if possible_width+(buffer.first_char-1) as usize>=width {
             buffer.set_position(screen, buffer.current_x, buffer.current_y-1);
             

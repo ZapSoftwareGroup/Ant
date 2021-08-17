@@ -82,13 +82,18 @@ pub fn draw_line(screen: &mut impl Write, buffer: &mut DefaultBuffer, x_pos: u16
 
 fn truncate_line<'a>(line: &'a str, buffer: &DefaultBuffer, terminal_width: u16) -> String {
     let allowed_chars = terminal_width - buffer.first_char + 1;
-    let char_count = &line.chars().count();
-    if char_count < &(allowed_chars as usize) {
-        line[buffer.starting_index as usize-1..].to_owned()
+    let char_count = line.chars().count();
+    // If the length of the line is less than the length of the screen...
+    if char_count < (allowed_chars as usize) {
+        // Just show the whole line
+        if char_count <= (buffer.starting_index-1) as usize {
+            String::new()
+        } else {
+            line[buffer.starting_index as usize-1..].to_owned()
+        }
     } else {
-        if !((allowed_chars as usize)+(buffer.starting_index-1) as usize >=*char_count) {
-            let return_line = line[buffer.starting_index as usize-1..(allowed_chars as usize)+(buffer.starting_index-1) as usize].to_owned();
-            return_line
+        if !((allowed_chars as usize)+(buffer.starting_index-1) as usize >=char_count) {
+            line[buffer.starting_index as usize-1..(allowed_chars as usize)+(buffer.starting_index-1) as usize].to_owned()
         } else {
             line[buffer.starting_index as usize-1..].to_owned()
         }

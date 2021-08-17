@@ -87,7 +87,7 @@ pub fn delete_char_or_newline(screen: &mut impl Write, buffer: &mut DefaultBuffe
     let current_line = (buffer.current_y+buffer.shown_first-2) as usize;
     let current_position = (buffer.current_x+buffer.starting_index-buffer.first_char-1) as usize;
     if buffer.current_x != buffer.first_char {
-        buffer.lines[current_line].1.remove(current_position);
+        buffer.lines[current_line].1.remove(current_position-1);
 
         draw_line(screen, buffer, buffer.current_x, current_line); 
       
